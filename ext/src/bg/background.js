@@ -68,3 +68,10 @@ chrome.webRequest.onCompleted.addListener(
 	[]
 )
 
+chrome.extension.onConnect.addListener(port => {
+	console.log("Refresh UI")
+	port.onMessage.addListener(msg => {
+		console.log('background recieved: ', msg)
+		port.postMessage(URLs)
+	});
+})

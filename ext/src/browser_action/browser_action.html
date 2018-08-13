@@ -12,11 +12,8 @@
 </style>
 
 <div id="mainPopup">
-	<h1>Hello extensionizr!</h1>
-	<p>To shut this popup down, edit the manifest file and remove the "default popup" key. To edit it, just edit ext/browser_action/browser_action.html. The CSS is there, too.</p>
+	<h1>Work Watch</h1>
+	<ul></ul>
 </div>
 
-<script>
-	chrome.storage.sync.get(['ww_URIs'], (result) => 
-		document.querySelector('#mainPopup'.innerHTML = JSON.stringify(result) ))
-</script>
+<script type="text/javascript" src="./browser_action.js"></script>
