@@ -1,0 +1,32 @@
+{
+  "name": "Work Watch",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Another stab at building a decent time keeper",
+  "homepage_url": "https://github.com/dubyajaysmith/work-watch",
+  "repo": "https://github.com/dubyajaysmith/work-watch",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "background": {
+    "page": "src/bg/background.html",
+    "persistent": true
+  },
+  "options_page": "src/options_custom/index.html",
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_title": "Work Watch",
+    "default_popup": "src/browser_action/browser_action.html"
+  },
+  "permissions": [
+    "history",
+    "idle",
+    "tabs",
+    "webRequest",
+    "storage",
+    "https://*/*"
+  ]
+}
