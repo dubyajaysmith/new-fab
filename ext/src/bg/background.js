@@ -30,6 +30,9 @@ chrome.storage.sync.get(['ww_store'], (result) => {
 	if(typeof ww_store !== 'object'){
 		const ww_store = {
 			urls: []
+			, time: 0
+			, added: new Date().getTime()
+			, updated: new Date().getTime()
 		}
 		chrome.storage.sync.set({ww_store})
 	}
@@ -56,7 +59,7 @@ chrome.webRequest.onCompleted.addListener(
 		if(details.url.includes('salesforce.com')){
 			
 			// Is it already in store?
-			if(URLs.includes(details.initiator)){
+			if(details.initiator && URLs.includes(details.initiator)){
 				// could keep tally of hits or something... unsure if useful yet
 			}
 			else {

@@ -1,3 +1,4 @@
+// jshint asi: true, esversion: 6, laxcomma: true
 const dom = {
     ul: document.querySelector('ul')
 }
@@ -7,11 +8,15 @@ const port = chrome.extension.connect({
 })
 
 port.postMessage("sending to background")
-port.onMessage.addListener(msg => {
-    msg.map(x => {
+port.onMessage.addListener(urls => {
+    urls.filter(x => x).map(x => {
 
-        const l = document.createElement('a')
-        l.textContent = x
-        dom.ul.appendChild(l).appendChild(document.createElement('br'))
+        const url = x.replace('https://', '').replace('http://', '')
+
+        const a = document.createElement('a')
+        const l = document.createElement('li')
+        l.title = url
+        a.textContent = url
+        dom.ul.appendChild(l).appendChild(a).appendChild(document.createElement('br'))
     })
 });
