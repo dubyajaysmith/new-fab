@@ -30,9 +30,6 @@ chrome.storage.sync.get(['ww_store'], (result) => {
 	if(typeof ww_store !== 'object'){
 		const ww_store = {
 			urls: []
-			, time: 0
-			, added: new Date().getTime()
-			, updated: new Date().getTime()
 		}
 		chrome.storage.sync.set({ww_store})
 	}
@@ -41,17 +38,29 @@ chrome.storage.sync.get(['ww_store'], (result) => {
 	}
 })
 
-		
-const saveUri = (uri) => {
-	chrome.storage.sync.get(['ww_store'], (result) => {
-		
-		const ww_store = result.ww_store
-
-		ww_store.urls.push(uri)
-		URLs.push(uri)
-		chrome.storage.sync.set({ww_store})
-	})
+const saveUri = (url) => {
+	if(url){
+		chrome.storage.sync.get(['ww_store'], (result) => {
+			
+			const ww_store = result.ww_store
+			const o = {
+				url,
+				time: 0
+				, added: new Date().getTime()
+				, updated: new Date().getTime()
+			}
+			const filter = ww_store.urls.filter(x => x.url === url)
+			if(filter.length === 0){
+				ww_store.urls.push(o)
+				URLs.push(o) // todo prolly del this
+				chrome.storage.sync.set({ww_store})
+			}
+		})
+	}
 }
+
+const getUri = () => new Promise(res => 
+		chrome.storage.sync.get(['ww_store'], x => res(x)))
 
 chrome.webRequest.onCompleted.addListener(
 	
@@ -78,3 +87,5 @@ chrome.extension.onConnect.addListener(port => {
 		port.postMessage(URLs)
 	});
 })
+
+getUri().then(x => console.dir(x))
