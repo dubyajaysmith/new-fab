@@ -62,6 +62,9 @@ const style = `
 .addLink {
     cursor: pointer;
 }
+.links {
+    padding-inline-start: 0px;
+}
 </style>
 `
 
@@ -79,8 +82,9 @@ ${style}
             <span class="delete">${icons.delete}</span>
         </div>
 
-        <h3>Links <span class="addLink">${icons.add}</span></h3>
+        <h3>Links</h3>
         <ul class="links"></ul>
+        <div><input class="link" type="url" placeholder="URL to add (https://google.com)" /><span class="addLink">${icons.add}</span></div>
         
     </div>
 </div>
@@ -121,6 +125,7 @@ export class MyProjects extends HTMLElement {
             projects: doc.querySelector('.projects'),
             actions: doc.querySelector('.actions'),
             delete: doc.querySelector('.delete'),
+            link: doc.querySelector('.link'),
             links: doc.querySelector('.links'),
             addLink: doc.querySelector('.addLink'),
             tbody: doc.querySelector('tbody'),
@@ -132,12 +137,19 @@ export class MyProjects extends HTMLElement {
 
         this.registerListeners()
     }
+    getProjects(){
+        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
+    }
     saveProjects(projects){
         return new Promise(res => chrome.storage.sync.set({projects}, () => 
             res(`updated projects. has ${projects.length} now.`)))
     }
-    getProjects(){
-        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
+    updateProject(project){
+        return new Promise(res => this.getProjects().then(bin => {
+            
+            const projects = [project, ...bin.projects.filter(x => x.name !== project.name)]
+            this.saveProjects(projects).then(x => res(x))
+        }))
     }
     registerListeners(){
                 
@@ -159,7 +171,11 @@ export class MyProjects extends HTMLElement {
                 
                 this.saveProjects(projects)
                     .then(() => this.getProjects()
-                    .then(x => this.buildProjects(x)))
+                    .then(x => {
+                        this.buildProjects(x)
+                        this.dom.projects.value = name
+                        this.dom.projects.onchange()
+                    }))
             })
         }
         this.dom.delete.onclick = () => {
@@ -167,30 +183,40 @@ export class MyProjects extends HTMLElement {
             const name = this.dom.projects.value
             
             if(confirm(`Sure you want to Delete ${name}?`)){
-                const save = projects => this.saveProjects(projects).then(x => console.log(x))
+                
                 this.getProjects().then(bin => {
                     
-                    const projects = bin.projects.filter(x => x.name !== name)
-                    save(projects)
+                    const projects = bin.projects.filter(x => x.name != name)
+                    this.saveProjects(projects).then(x => console.log(x))
                 })
             }
         }
         this.dom.addLink.onclick = () => {
-
-            console.log('todo => add link')
+            
+            const link = this.dom.link.value
+            if(link){
+                this.project.links.push(link)
+                this.updateProject(this.project)
+                .then(x => {
+                    console.log(x)
+                    this.buildLinks()
+                })
+            }
         }
         
         /* On Change */
         this.dom.projects.onchange = e => {
             
             const name = this.dom.projects.value
+            console.log(name)
 
             this.getProjects().then(bin => {
-                
-                const project = bin.projects.reduce((a,c) => c.name == name ? c : null)
+                console.dir(bin.projects)
+                const project = bin.projects.filter(x => x.name == name)[0]
                 console.dir(project)
                 if(project){
-                    this.buildLinks(project)
+                    this.project = project
+                    this.buildLinks()
                     this.dom.area.classList.add('active')
                 }
                 else {
@@ -216,19 +242,24 @@ export class MyProjects extends HTMLElement {
         this.dom.projects.appendChild(opt('Select Project'))
         bin.projects.map(x => this.dom.projects.appendChild(opt(x.name)))
     }
-    buildLinks(project){
+    buildLinks(){
+
+        //https://docs.google.com/spreadsheets/d/1d3ObFuJbWYyr57m9aBQ-1mGkY6ckuE0S59oEJvhtHlo/edit#gid=1438171332
+        console.dir('buildLinks')
+        console.dir(this.project)
 
         while (this.dom.links.lastChild) {
             this.dom.links.removeChild(this.dom.links.lastChild)
         }
-
+        const clean = x => x.replace('https://', '').replace('http://', '')
         const link = val => {
             const o = document.createElement('a')
             o.href = val
+            o.textContent = val.length > 45 ? clean(val).substring(0, 45)+'...' : clean(val)
             return o
         }
 
-        project.links.map(x => this.dom.links.appendChild(link(x)))
+        this.project.links.map(x => this.dom.links.appendChild(link(x)))
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv);
