@@ -1,35 +1,44 @@
-<!doctype html>
-<style type="text/css">
-	h1 {
-		font-size: 2em;
-	}
-	ul {
-		-webkit-margin-before: 0px;
-		-webkit-margin-after: 0px;
-		-webkit-margin-start: 0px;
-		-webkit-margin-end: 0px;
-		-webkit-padding-start: 0px;
-		list-style-type: none;
-	}
-	li {
-		padding: .5rem;
-		font-size: .8rem;
-		cursor: pointer;
-		background: #eee;
-		list-style-type: none;
-	}
-	#mainPopup {
-		padding: 10px;
-		height: 200px;
-		width: 400px;
-		font-family: Helvetica, Ubuntu, Arial, sans-serif;
-	}
-	
-</style>
+<html>
 
+<link rel="stylesheet" href="./css/browser_action.css"/>
+
+<title>Work Watch(new tab)</title>
+
+<script type="module" src="../components/my-projects/my-projects.js"></script>
+<script type="module" src="../components/my-settings/my-settings.js"></script>
+
+
+<body class="app">
+
+	<div class="app-grid">
+
+		<div class="side">
+			<svg id="my-projects" viewBox="0 0 100 100">
+				<use href="../components/my-projects/icon.svg#my-projects_icon"></use>
+			</svg>
+			<svg id="my-settings" viewBox="0 0 100 100">
+				<use href="../components/my-settings/icon.svg#my-settings_icon"></use>
+			</svg>
+		</div>
+
+		<div class="main">
+			<my-projects></my-projects>
+			<my-settings></my-settings>
+		</div>
+	</div>
+</body>
+
+<script src="./js/nav.js"></script>
+
+</html>
+
+
+
+<!-- 
 <div id="mainPopup">
-	<h1>Work Watch</h1>
+	<h1>Work Watch 1</h1>
 	<ul></ul>
 </div>
 
-<script type="text/javascript" src="./browser_action.js"></script>
+
+<!-- script type="text/javascript" src="./browser_action.js"></script>-->

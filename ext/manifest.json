@@ -27,5 +27,8 @@
     "webRequest",
     "storage",
     "https://*/*"
-  ]
+  ],
+  "chrome_url_overrides" : {
+    "newtab": "src/browser_action/browser_action.html"
+  }
 }

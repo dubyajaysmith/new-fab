@@ -22,6 +22,7 @@ Potential blacklist ?
 //chrome.storage.sync.set({ww_store: ''})
 
 // Setup store & list of urls
+/*
 let URLs = [] // TODO I don't like this global...
 chrome.storage.sync.get(['ww_store'], (result) => {
 
@@ -89,3 +90,6 @@ chrome.extension.onConnect.addListener(port => {
 })
 
 getUri().then(x => console.dir(x))
+
+
+*/
