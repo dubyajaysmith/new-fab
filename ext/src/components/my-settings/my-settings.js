@@ -24,7 +24,7 @@ template.innerHTML = `
 ${style}
 <div class="card">
     <h2>Settings</h2>
-    <h3>todo : background, theme, more</h3>
+    <h3>todo : load other components, theme</h3>
 </div>`
 
 export class MySettings extends HTMLElement {

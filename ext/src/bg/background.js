@@ -1,6 +1,6 @@
 // jshint asi: true, esversion: 6, laxcomma: true
 
-console.log('background.js --> work-watch')
+console.log('background.js --> New Fab background does nothing right now')
 
 /* TODOs
 
