@@ -26,20 +26,9 @@ const icons = {
 }
 //7fffd4
 const style = `
+<link rel="stylesheet" href="../shared/shared.css"/>
+
 <style>
-.card {
-    border-radius: 5px;
-    max-width: 100%;
-    min-height: 20rem;
-    background: #fff;
-    margin: 1rem;
-	padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-.card:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-}
 .projects {
     cursor: pointer;
     font-size: 1.42rem;
@@ -66,7 +55,7 @@ const style = `
     padding-inline-start: 0px;
 }
 </style>
-`
+`.trim()
 
 
 const template = document.createElement('template')

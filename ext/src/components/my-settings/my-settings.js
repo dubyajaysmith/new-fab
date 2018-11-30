@@ -2,21 +2,8 @@
 //'use strict()'
 
 const style = `
-<style>
-.card {
-    border-radius: 5px;
-    max-width: 100%;
-    min-height: 20rem;
-    background: #fff;
-    margin: 1rem;
-	padding: 1rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-.card:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-}
-</style>
+    <link rel="stylesheet" href="../shared/shared.css"/>
+    <style></style>
 `
 
 const template = document.createElement('template')
@@ -25,6 +12,13 @@ ${style}
 <div class="card">
     <h2>Settings</h2>
     <h3>todo : load other components, theme</h3>
+
+    <section>
+        <h3>Modules</h3>
+        <div></div>
+        <button class="install">Install Module</button>
+        <input class="getModule" type="file" style="display:none;" />
+    </section>
 </div>`
 
 export class MySettings extends HTMLElement {
@@ -35,19 +29,40 @@ export class MySettings extends HTMLElement {
         this.attachShadow({mode: 'open'})
     }
     static get is() {
-        return 'my-settings';
+        return 'my-settings'
     }
 
     static get observedAttributes() {
         
     }
 
-    connectedCallback() {
-        console.log('my-settings connected')
+    connectedCallback() { console.log('my-settings connected')
+        
         this.shadowRoot.appendChild(template.content.cloneNode(true))
+        this.registerElements(this.shadowRoot)
+    }
+    registerElements(doc){ // console.log('registerElements')
+
+        this.dom = {
+            name: doc.querySelector('.name')
+            ,install: doc.querySelector('.install')
+            ,getModule: doc.querySelector('.getModule')
+        }
+
+        this.dom.install.onclick = () => this.dom.getModule.click()
+            
+        this.dom.getModule.onchange = () => {
+            const file = this.dom.getModule.files[0]
+            if(!file){
+                console.log('no file')
+                return
+            }
+
+
+        }
     }
     attributeChangedCallback(n, ov, nv) {
-        super.attributeChangedCallback(n, ov, nv);
+        super.attributeChangedCallback(n, ov, nv)
         console.dir(n)
         console.dir(ov)
         console.dir(nv)
@@ -59,4 +74,4 @@ export class MySettings extends HTMLElement {
         //}
     }
 }
-customElements.define(MySettings.is, MySettings);
+customElements.define(MySettings.is, MySettings)

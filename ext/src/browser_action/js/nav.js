@@ -23,7 +23,3 @@ dom.navs.map(n => n.onclick = () => {
         }
     })
 })
-
-
-//console.dir(dom.navs)
-//console.dir(dom.cmps)

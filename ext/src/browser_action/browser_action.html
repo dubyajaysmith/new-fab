@@ -1,18 +1,18 @@
 <html>
 
-<link rel="stylesheet" href="./css/browser_action.css"/>
+<link rel="stylesheet" href="../shared/shared.css"/>
 
 <title>New Fab</title>
 
 <script type="module" src="../components/my-projects/my-projects.js"></script>
 <script type="module" src="../components/my-settings/my-settings.js"></script>
-
+<script type="module" src="../components/my-tasks/my-tasks.js"></script>
 
 <body class="app">
 
 	<div class="app-header">
 		<div class="app-title">
-			<img class="app-icon" src="./icons/icon.png"/>
+			<img class="app-icon" src="../shared/icon.png"/>
 			New Fab
 			<span class="app-title-message"/>
 		</div>
@@ -24,6 +24,9 @@
 			<svg id="my-projects" viewBox="0 0 100 100">
 				<use href="../components/my-projects/icon.svg#my-projects_icon"></use>
 			</svg>
+			<svg id="my-tasks" viewBox="0 0 100 100">
+				<use href="../components/my-tasks/icon.svg#my-tasks_icon"></use>
+			</svg>
 			<svg id="my-settings" viewBox="0 0 100 100">
 				<use href="../components/my-settings/icon.svg#my-settings_icon"></use>
 			</svg>
@@ -31,6 +34,7 @@
 
 		<div class="main">
 			<my-projects></my-projects>
+			<my-tasks></my-tasks>
 			<my-settings></my-settings>
 		</div>
 	</div>
@@ -43,6 +47,10 @@
 
 
 <!-- 
+#ff00f0 - pink
+
+
+
 <div id="mainPopup">
 	<h1>1</h1>
 	<ul></ul>
