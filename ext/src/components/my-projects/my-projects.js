@@ -24,10 +24,9 @@ const icons = {
         <path fill="none" d="M0 0h24v24H0z"></path>
     </svg>`
 }
-//7fffd4
+
 const style = `
 <link rel="stylesheet" href="../shared/shared.css"/>
-
 <style>
 .projects {
     cursor: pointer;
@@ -54,8 +53,13 @@ const style = `
 .links {
     padding-inline-start: 0px;
 }
+.notes {
+    width: 100%;
+    height: 7rem;
+    border-radius: 5px;
+}
 </style>
-`.trim()
+`
 
 
 const template = document.createElement('template')
@@ -74,16 +78,20 @@ ${style}
         <h3>Links</h3>
         <ul class="links"></ul>
         <div><input class="link" type="url" placeholder="URL to add (https://google.com)" /><span class="addLink">${icons.add}</span></div>
+
+        <h3>Notes</h3>
+        <div><textarea class="notes" placeholder="Notes for project" ></textarea></div>
         
     </div>
+    <br /><br />
+    <section>
+        <h2>New Project</h2>
+        <input class="pName" placeholder="Project Name"/>
+        <br /><br />
+        <button class="save">Save</button>
+    </section>
 </div>
-
-<div class="card">
-    <h2>New Project</h2>
-    <input class="pName" placeholder="Project Name"/>
-    <br />
-    <button class="save">Save</button>
-</div>`
+`.trim()
 
 export class MyProjects extends HTMLElement {
     
@@ -103,9 +111,9 @@ export class MyProjects extends HTMLElement {
         console.log('connectedCallback')
         this.shadowRoot.appendChild(template.content.cloneNode(true))
         
-        this.registerElements(this.shadowRoot)
+        this.initElements(this.shadowRoot)
     }
-    registerElements(doc){
+    initElements(doc){
 
         chrome.storage.sync.get(['projects'], bin => 
             Array.isArray(bin.projects) ? this.buildProjects(bin) : chrome.storage.sync.set({ projects:[] }, () => console.log('setup projects')))
@@ -116,6 +124,7 @@ export class MyProjects extends HTMLElement {
             delete: doc.querySelector('.delete'),
             link: doc.querySelector('.link'),
             links: doc.querySelector('.links'),
+            notes: doc.querySelector('.notes'),
             addLink: doc.querySelector('.addLink'),
             tbody: doc.querySelector('tbody'),
             thead: doc.querySelector('thead'),
@@ -148,10 +157,10 @@ export class MyProjects extends HTMLElement {
             const name = this.dom.pName.value
             if(!name){
                 console.warn('Project needs a name')
-                return
+                return false
             }
             const project = {
-                name, time: [], orgs: [], tasks: [], links: [],
+                name, time: [], orgs: [], tasks: [], links: [], notes: ``
             }
             
             this.getProjects().then(bin => {
@@ -206,6 +215,7 @@ export class MyProjects extends HTMLElement {
                 if(project){
                     this.project = project
                     this.buildLinks()
+                    this.buildNotes()
                     this.dom.area.classList.add('active')
                 }
                 else {
@@ -214,9 +224,18 @@ export class MyProjects extends HTMLElement {
             })
                 
         }
+        /* On onblur */
+        this.dom.notes.onblur = e => {
+            this.project.notes = this.dom.notes.value
+            this.updateProject(this.project)
+            .then(x => {
+                console.log(x)
+            })
+        }
     }
     buildProjects(bin){
 
+        const def = '--select--'
         while (this.dom.projects.lastChild) {
             this.dom.projects.removeChild(this.dom.projects.lastChild)
         }
@@ -224,11 +243,11 @@ export class MyProjects extends HTMLElement {
         const opt = name => {
             const o = document.createElement('option')
             o.textContent = name
-            o.id = name === 'Select Project' ? '' : name
+            o.id = name === def ? '' : name
             return o
         }
 
-        this.dom.projects.appendChild(opt('Select Project'))
+        this.dom.projects.appendChild(opt(def))
         bin.projects.map(x => this.dom.projects.appendChild(opt(x.name)))
     }
     buildLinks(){
@@ -249,6 +268,12 @@ export class MyProjects extends HTMLElement {
         }
 
         this.project.links.map(x => this.dom.links.appendChild(link(x)))
+    }
+    buildNotes(){
+
+        console.dir('buildNotes')
+
+        this.dom.notes.value = this.project.notes
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv);

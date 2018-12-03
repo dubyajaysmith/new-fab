@@ -21,7 +21,9 @@
     "default_popup": "src/browser_action/browser_action.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "bookmarks",
+    "history"
   ],
   "chrome_url_overrides" : {
     "newtab": "src/browser_action/browser_action.html"

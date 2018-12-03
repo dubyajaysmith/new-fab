@@ -14,7 +14,7 @@ dom.cmps.map(x => x !== dom.cmps[0] ? x.style.display = 'none': null)
 dom.navs.map(n => n.onclick = () => {
     //console.log(`${n.id} clicked`)
     dom.cmps.map(x => {
-        console.log(n.id, x.localName)
+        //console.log(n.id, x.localName)
         if(n.id == x.localName){
             x.style.display = 'block'
         }

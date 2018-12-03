@@ -39,9 +39,9 @@ export class MySettings extends HTMLElement {
     connectedCallback() { console.log('my-settings connected')
         
         this.shadowRoot.appendChild(template.content.cloneNode(true))
-        this.registerElements(this.shadowRoot)
+        this.initElements(this.shadowRoot)
     }
-    registerElements(doc){ // console.log('registerElements')
+    initElements(doc){ // console.log('initElements')
 
         this.dom = {
             name: doc.querySelector('.name')
@@ -58,7 +58,9 @@ export class MySettings extends HTMLElement {
                 return
             }
 
-
+            const imgurl = "https://www.google.com.hk/images/srpr/logo11w.png";
+            chrome.downloads.download({url:imgurl}, downloadId => {
+            })
         }
     }
     attributeChangedCallback(n, ov, nv) {

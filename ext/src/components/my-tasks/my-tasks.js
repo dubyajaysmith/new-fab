@@ -52,10 +52,10 @@ export class MyTasks extends HTMLElement {
         //console.log('connectedCallback')
         this.shadowRoot.appendChild(template.content.cloneNode(true))
         
-        this.registerElements(this.shadowRoot)
+        this.initElements(this.shadowRoot)
     }
-    registerElements(doc){
-        //console.log('registerElements')
+    initElements(doc){
+        //console.log('initElements')
         
         this.dom = {
             note: doc.querySelector('textarea'),

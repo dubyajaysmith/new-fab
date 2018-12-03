@@ -29,18 +29,6 @@ section {
     border-radius: 5px;
     background: var(--grey-white);
 }
-button {
-    background: var(--grey-dark);
-    color: var(--grey-white);
-    border-radius: 5px;
-    padding: .5rem;
-    cursor: pointer;
-    outline: -webkit-focus-ring-color #FF00F0 5px;
-    outline-color: var(--grey-dark);
-    outline-style: auto;
-    outline-width: 0px;
-    border: none;
-}
 h1 {
 	font-size: 2em;
 }
@@ -59,6 +47,57 @@ li {
 	cursor: pointer;
 	background: var(--grey-white);
 	list-style-type: none;
+}
+button {
+    background: var(--grey-dark);
+    color: var(--grey-white);
+    border-radius: 5px;
+    padding: .5rem;
+    cursor: pointer;
+    outline: -webkit-focus-ring-color #FF00F0 5px;
+    outline-color: var(--grey-dark);
+    outline-style: auto;
+    outline-width: 0px;
+    border: none;
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+button:hover {
+	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+input {
+    background: var(--grey-dark);
+    color: var(--grey-white);
+    border-radius: 5px;
+    padding: .5rem;
+    cursor: pointer;
+    outline: -webkit-focus-ring-color #FF00F0 5px;
+    outline-color: var(--grey-dark);
+    outline-style: auto;
+    outline-width: 0px;
+    border: none;
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+input:hover {
+	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+select {
+    background: var(--grey-dark);
+    color: var(--grey-white);
+    border-radius: 5px;
+    padding: .5rem;
+    cursor: pointer;
+    outline: -webkit-focus-ring-color #FF00F0 5px;
+    outline-color: var(--grey-dark);
+    outline-style: auto;
+    outline-width: 0px;
+    border: none;
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+select:hover {
+	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
 }
 
 
@@ -163,11 +202,11 @@ li {
 .card {
     border-radius: 5px;
     max-width: 100%;
-    min-height: 20rem;
+    /* min-height: 20rem; */
     background: #fff;
     margin: 1rem;
 	padding: 1rem;
-    box-shadow: var(--shadow-high);
+    box-shadow: var(--shadow-low);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 .card:hover {
