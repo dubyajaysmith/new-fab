@@ -108,6 +108,9 @@ export class MyHistory extends HTMLElement {
         }
 
         chrome.history.search({text:'', maxResults: 35}, (res) => {
+
+            console.dir(res)
+
             const data = []
             res.map(x => {
                 if(x.url || !data.contains(x.title)){

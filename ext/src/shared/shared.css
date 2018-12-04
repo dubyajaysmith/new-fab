@@ -145,13 +145,15 @@ select:hover {
 	padding: 0px;
 	height: 100%;
 	display: grid;
+
+	justify-content: center;
 	grid-template-columns: 1fr 9fr;
 }
 
 .side {
-	background: var(--grey-mid);
+	padding-top: 1rem;
 	text-align: center;
-	padding-left: .5rem;
+	background: var(--grey-mid);
 }
 
 .side svg {
