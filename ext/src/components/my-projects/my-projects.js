@@ -58,6 +58,25 @@ const style = `
     height: 7rem;
     border-radius: 5px;
 }
+.preview {
+    left: -400px;
+    top: -300;
+    width: 2500px;
+    height: 1260;
+    transform: scale(.25);
+    z-index: 999;
+    position: absolute;
+    border-radius: 5px;
+    background: var(--grey-dark);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.frame {
+    width: 100%;
+    height: 100%;
+}
+.hide {
+    display: none;
+}
 </style>
 `
 
@@ -77,7 +96,8 @@ ${style}
 
         <h3>Links</h3>
         <ul class="links"></ul>
-        <div><input class="link" type="url" placeholder="URL to add (https://google.com)" /><span class="addLink">${icons.add}</span></div>
+        <div><input class="link" type="url" placeholder="URL to add (https://example.com)" /><span class="addLink">${icons.add}</span></div>
+        
 
         <h3>Notes</h3>
         <div><textarea class="notes" placeholder="Notes for project" ></textarea></div>
@@ -90,6 +110,11 @@ ${style}
         <br /><br />
         <button class="save">Save</button>
     </section>
+    
+    <div class="preview hide">
+        <iframe class="frame hide" src="https://www.example.com" />
+    </div>
+
 </div>
 `.trim()
 
@@ -119,6 +144,7 @@ export class MyProjects extends HTMLElement {
             Array.isArray(bin.projects) ? this.buildProjects(bin) : chrome.storage.sync.set({ projects:[] }, () => console.log('setup projects')))
 
         this.dom = {
+            card: doc.querySelector('.card'),
             projects: doc.querySelector('.projects'),
             actions: doc.querySelector('.actions'),
             delete: doc.querySelector('.delete'),
@@ -130,7 +156,9 @@ export class MyProjects extends HTMLElement {
             thead: doc.querySelector('thead'),
             pName: doc.querySelector('.pName'),
             save: doc.querySelector('.save'),
-            area: doc.querySelector('.area')
+            area: doc.querySelector('.area'),
+            preview: doc.querySelector('.preview'),
+            frame: doc.querySelector('.frame')
         }
 
         this.registerListeners()
@@ -152,6 +180,8 @@ export class MyProjects extends HTMLElement {
     registerListeners(){
                 
         /* On Click */
+        console.dir(this.dom)
+
         this.dom.save.onclick = () => {
             
             const name = this.dom.pName.value
@@ -232,6 +262,24 @@ export class MyProjects extends HTMLElement {
                 console.log(x)
             })
         }
+
+        /* preview */
+        this.dom.preview.onclick = e => {
+            e.preventDefault()
+            console.log('zoomzoom')
+        }
+        this.dom.preview.ondblclick = e => {
+            e.preventDefault()
+            
+            console.log('ondblclick ')
+            window.open(this.dom.frame.src)
+        }
+
+        /* card / clear higher things */
+        this.dom.card.onclick = () => {
+            console.log('card click')
+            this.dom.preview.classList.add('hide')
+        }
     }
     buildProjects(bin){
 
@@ -259,12 +307,38 @@ export class MyProjects extends HTMLElement {
         while (this.dom.links.lastChild) {
             this.dom.links.removeChild(this.dom.links.lastChild)
         }
-        const clean = x => x.replace('https://', '').replace('http://', '')
         const link = val => {
+
+            const li = document.createElement('li')
             const o = document.createElement('a')
             o.href = val
-            o.textContent = val.length > 45 ? clean(val).substring(0, 45)+'...' : clean(val)
-            return o
+            o.textContent = val.length > 50 ? `${val.substring(0, 50)}...` : val
+            
+            //preview on hover :)
+            o.onmouseover = e => {
+            
+                if (this.dom.frame.src != o.href) {
+                
+                    this.dom.frame.classList.remove('hide')
+                    this.dom.frame.src = o.href 
+                    this.dom.frame.onload = () => {
+                        console.log('loaded')
+                        this.dom.preview.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                        this.dom.preview.height = this.dom.frame.contentWindow.document.body.scrollHeight                    
+                        this.dom.frame.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                        this.dom.frame.height = this.dom.frame.contentWindow.document.body.scrollHeight
+                    
+                    }
+                    this.dom.frame.contentWindow.location.reload(true)
+                }
+                this.dom.preview.classList.remove('hide')
+            }
+            
+            //o.onmouseout = () => this.dom.preview.classList.toggle('hide')
+            
+            li.appendChild(o)
+            
+            return li
         }
 
         this.project.links.map(x => this.dom.links.appendChild(link(x)))
