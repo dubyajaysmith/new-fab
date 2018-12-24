@@ -24,6 +24,25 @@ img, a {
     height: 1.75rem;
     padding-right: .25rem;
 }
+.preview {
+    left: -400px;
+    top: -300;
+    width: 2500px;
+    height: 1260;
+    transform: scale(.25);
+    z-index: 999;
+    position: absolute;
+    border-radius: 5px;
+    background: var(--grey-dark);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+.frame {
+    width: 100%;
+    height: 100%;
+}
+.hide {
+    display: none;
+}
 </style>
 `
 
@@ -35,12 +54,21 @@ ${style}
     <h2>Bookmarks</h2>
     <div class="books">
     </div>
-</div>
-<div class="card">
+
+    <br/>
+    
     <h2>Recent</h2>
     <section class="recent">
     </section>
-</div>`
+    
+    <br/>
+
+    <div class="preview hide">
+        <iframe class="frame hide" src="https://www.example.com" />
+    </div>
+</div>
+
+`
 
 export class MyHistory extends HTMLElement {
 
@@ -62,23 +90,26 @@ export class MyHistory extends HTMLElement {
         
         this.initElements(this.shadowRoot)
     }
+
     initElements(doc){
-        //console.log('initElements')
-        
+        console.log('initElements')
+        console.dir(doc)
         this.dom = {
+            card: doc.querySelector('.card'),
             books: doc.querySelector('.books'),
             recent: doc.querySelector('.recent'),
+            preview: doc.querySelector('.preview'),
+            frame: doc.querySelector('.frame')
         }
 
-        //this.dom.save.onclick = () => {
-        //    console.log('SAVE ', this.dom.note.value)
+        //dom.save.onclick = () => {
+        //    console.log('SAVE ', dom.note.value)
         //}
         console.log(this.is)
         this.buildBookmarks()
         this.buildRecent()
-
-        
     }
+
     buildBookmarks(){
         let test = 0
         chrome.bookmarks.getTree(x => x.map(x => x.children.map(x => x.children.map(x => {
@@ -86,10 +117,40 @@ export class MyHistory extends HTMLElement {
                 if(x.url.substring(0, 7) !== 'chrome:'){
 
                     const url = new URL(x.url)
+
+                    const a = document.createElement('a')
+                    a.href = `${x.url}`
+                    a.target = `_self`
+
+                    //preview on hover :)
+                    a.onmouseover = e => {
                     
-                    this.dom.books.innerHTML += `
-                        <a href="${x.url}" target="_self"><img title="${x.url}" src="http://www.google.com/s2/favicons?domain=${url.hostname}" /></a>
-                    `//<img title="${x.url}" src="${uri}"/>
+                        if (this.dom.frame.src != a.href) {
+                        
+                            this.dom.frame.classList.remove('hide')
+                            this.dom.frame.src = a.href 
+                            this.dom.frame.onload = () => {
+                                console.log('loaded')              
+                                this.dom.frame.width    = this.dom.frame.contentWindow.document.body.scrollWidth
+                                this.dom.frame.height   = this.dom.frame.contentWindow.document.body.scrollHeight
+                                this.dom.preview.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                                this.dom.preview.height = this.dom.frame.contentWindow.document.body.scrollHeight      
+                            
+                            }
+
+                            this.dom.frame.contentWindow.location.reload(true)
+                        }
+
+                        this.dom.preview.classList.remove('hide')
+                    }
+
+                    const img = document.createElement('img')
+                    img.title = `${x.url}`
+                    img.src = `http://www.google.com/s2/favicons?domain=${url.hostname}`
+
+                    a.appendChild(img)
+                    
+                    this.dom.books.appendChild(a)
                 }
                 else {
                     return false
@@ -103,22 +164,63 @@ export class MyHistory extends HTMLElement {
 
             if(x.url){
                 const url = new URL(x.url)
-                return `<a href="${x.url}" target="_self"><img title="${x.url}" src="http://www.google.com/s2/favicons?domain=${url.hostname}" /></a>`
+                
+
+                const img = document.createElement('img')
+                img.title = x.url
+                img.src = `http://www.google.com/s2/favicons?domain=${url.hostname}`
+
+                const a = document.createElement('a')
+                a.href = `${x.url}`
+                a.target = "_self"
+                
+                //a.textContent = url.length > 50 ? `${url.substring(0, 50)}...` : url
+                    
+                    
+                //preview on hover :)
+                a.onmouseover = e => {
+                
+                    if (this.dom.frame.src != a.href) {
+                    
+                        this.dom.frame.classList.remove('hide')
+                        this.dom.frame.src = a.href 
+                        this.dom.frame.onload = () => {
+                            console.log('loaded')              
+                            this.dom.frame.width    = this.dom.frame.contentWindow.document.body.scrollWidth
+                            this.dom.frame.height   = this.dom.frame.contentWindow.document.body.scrollHeight
+                            this.dom.preview.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                            this.dom.preview.height = this.dom.frame.contentWindow.document.body.scrollHeight      
+                        
+                        }
+
+                        this.dom.frame.contentWindow.location.reload(true)
+                    }
+
+                    this.dom.preview.classList.remove('hide')
+                }
+            
+                //o.onmouseout = () => dom.preview.classList.toggle('hide')
+                
+                a.appendChild(img)
+                
+                return a
             }
         }
 
         chrome.history.search({text:'', maxResults: 35}, (res) => {
 
-            console.dir(res)
+            const recent = this.dom.recent
 
             const data = []
             res.map(x => {
                 if(x.url || !data.contains(x.title)){
                     data.push(x.title)
-                    this.dom.recent.innerHTML += link(x)
+                    recent.appendChild(link(x))
                 }
             })
         })
+
+        this.setListeners()
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv)
@@ -130,6 +232,26 @@ export class MyHistory extends HTMLElement {
         //        ov !== nv // old val not equal new val
         //        break;
         //}
+    }
+    setListeners(){
+
+        /* preview */
+        this.dom.preview.onclick = e => {
+            e.preventDefault()
+            console.log('zoomzoom')
+        }
+        this.dom.preview.ondblclick = e => {
+            e.preventDefault()
+            
+            console.log('ondblclick ')
+            window.open(this.dom.frame.src, '_self')
+        }
+
+        /* card / clear higher things */
+        this.dom.card.onclick = () => {
+            console.log('card click')
+            this.dom.preview.classList.add('hide')
+        }
     }
 }
 

@@ -26,6 +26,7 @@ const icons = {
 }
 
 const style = `
+
 <link rel="stylesheet" href="../shared/shared.css"/>
 <style>
 .projects {
@@ -56,6 +57,7 @@ const style = `
 .notes {
     width: 100%;
     height: 7rem;
+    max-width: 100%;
     border-radius: 5px;
 }
 .preview {
@@ -80,10 +82,12 @@ const style = `
 </style>
 `
 
-
+console.log('wopwopwowpwopwop')
 const template = document.createElement('template')
 //template.innerHTML = `<div class="card"><div class="header"></div><table><thead></thead><tbody></tbody></table></div>`
 template.innerHTML = `
+
+
 ${style}
 <div class="card">
     <h2>Projects</h2>
@@ -101,7 +105,9 @@ ${style}
 
         <h3>Notes</h3>
         <div><textarea class="notes" placeholder="Notes for project" ></textarea></div>
-        
+
+        <project-tasks></project-tasks>
+
     </div>
     <br /><br />
     <section>
@@ -158,7 +164,8 @@ export class MyProjects extends HTMLElement {
             save: doc.querySelector('.save'),
             area: doc.querySelector('.area'),
             preview: doc.querySelector('.preview'),
-            frame: doc.querySelector('.frame')
+            frame: doc.querySelector('.frame'),
+            task: doc.querySelector('project-tasks')
         }
 
         this.registerListeners()
@@ -231,6 +238,23 @@ export class MyProjects extends HTMLElement {
                 })
             }
         }
+        /* preview */
+        this.dom.preview.onclick = e => {
+            e.preventDefault()
+            console.log('zoomzoom')
+        }
+        this.dom.preview.ondblclick = e => {
+            e.preventDefault()
+            
+            console.log('ondblclick ')
+            window.open(this.dom.frame.src)
+        }
+        /* card / clear higher things */
+        this.dom.card.onclick = () => {
+            console.log('card click')
+            this.dom.preview.classList.add('hide')
+        }
+
         
         /* On Change */
         this.dom.projects.onchange = e => {
@@ -247,13 +271,16 @@ export class MyProjects extends HTMLElement {
                     this.buildLinks()
                     this.buildNotes()
                     this.dom.area.classList.add('active')
+                    this.dom.task.setAttribute("project", name)
                 }
                 else {
                     this.dom.actions.classList.remove('active')
                 }
             })
-                
+
+            localStorage.selected_project = this.dom.projects.options.selectedIndex
         }
+
         /* On onblur */
         this.dom.notes.onblur = e => {
             this.project.notes = this.dom.notes.value
@@ -263,23 +290,7 @@ export class MyProjects extends HTMLElement {
             })
         }
 
-        /* preview */
-        this.dom.preview.onclick = e => {
-            e.preventDefault()
-            console.log('zoomzoom')
-        }
-        this.dom.preview.ondblclick = e => {
-            e.preventDefault()
-            
-            console.log('ondblclick ')
-            window.open(this.dom.frame.src)
-        }
-
-        /* card / clear higher things */
-        this.dom.card.onclick = () => {
-            console.log('card click')
-            this.dom.preview.classList.add('hide')
-        }
+        this.ready()
     }
     buildProjects(bin){
 
@@ -360,6 +371,15 @@ export class MyProjects extends HTMLElement {
         //        this.setText(ov, nv);
         //        break;
         //}
+    }
+    ready(){
+        setTimeout(() => {
+            // Use local store if set before by above
+            console.dir(this.dom.projects.options)
+            this.dom.projects.options.selectedIndex = localStorage.selected_project
+            this.dom.projects.onchange()
+            console.log(this.dom.projects.options.selectedIndex +' '+ localStorage.selected_project)
+        }, 0)
     }
 }
 customElements.define(MyProjects.is, MyProjects);

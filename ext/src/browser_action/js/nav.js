@@ -9,17 +9,12 @@ const dom = {
 dom.navs = Array.from(dom.side.querySelectorAll('svg'))
 dom.cmps = Array.from(dom.main.children)
 
-dom.cmps.map(x => x !== dom.cmps[0] ? x.style.display = 'none': null)
-
 dom.navs.map(n => n.onclick = () => {
-    //console.log(`${n.id} clicked`)
-    dom.cmps.map(x => {
-        //console.log(n.id, x.localName)
-        if(n.id == x.localName){
-            x.style.display = 'block'
-        }
-        else {
-            x.style.display = 'none'
-        }
+    dom.navs.map(el => {
+        console.log(el.id + ' ' + n.id)
+        el.id !== n.id ? el.classList.remove('active') : el.classList.add('active')
     })
+    dom.cmps.map(x => n.id == x.localName ? x.classList.add('active') : x.classList.remove('active'))
 })
+
+dom.navs[0].onclick()

@@ -1,6 +1,5 @@
 @import 'https://fonts.googleapis.com/css?family=Roboto+Mono:300';
 @import url('https://fonts.googleapis.com/css?family=Monoton');
-
 html {
 	--pink: #ff00f0;
 	--blue: #0288d1;
@@ -10,13 +9,13 @@ html {
 	--grey-mid: grey;
 	--grey-light: lightGrey;
 	--grey-white: #f7f7f7;
-	--shadow-low: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	--shadow-low: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 	--shadow-mid: 0px 2px 4px 0 rgba(0, 0, 0, 0.35), 0px -4px 10px 0px rgba(0, 0, 0, 0.35);
-	--shadow-high: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	--shadow-high: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 	--shadow-drop: drop-shadow(12px 12px 7px rgba(0, 0, 0, 0.5));
 }
+
 html, body {
-	
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
@@ -24,14 +23,17 @@ html, body {
 	font-family: 'Roboto Mono', monospace;
 	/* background: #212121; */
 }
+
 section {
-    padding: 0.1rem 0.5rem 1.5rem 0.5rem;
-    border-radius: 5px;
-    background: var(--grey-white);
+	padding: 0.1rem 0.5rem 1.5rem 0.5rem;
+	border-radius: 5px;
+	background: var(--grey-white);
 }
+
 h1 {
 	font-size: 2em;
 }
+
 ul {
 	-webkit-margin-before: 0px;
 	-webkit-margin-after: 0px;
@@ -41,6 +43,7 @@ ul {
 	list-style-type: none;
 	width: 100%;
 }
+
 li {
 	padding: .5rem;
 	font-size: .8rem;
@@ -48,58 +51,66 @@ li {
 	background: var(--grey-white);
 	list-style-type: none;
 }
+
 button {
-    background: var(--grey-dark);
-    color: var(--grey-white);
-    border-radius: 5px;
-    padding: .5rem;
-    cursor: pointer;
-    outline: -webkit-focus-ring-color #FF00F0 5px;
-    outline-color: var(--grey-dark);
-    outline-style: auto;
-    outline-width: 0px;
-    border: none;
+	background: var(--grey-dark);
+	color: var(--grey-white);
+	border-radius: 5px;
+	padding: .5rem;
+	cursor: pointer;
+	outline: -webkit-focus-ring-color #FF00F0 5px;
+	outline-color: var(--grey-dark);
+	outline-style: auto;
+	outline-width: 0px;
+	border: none;
 	box-shadow: var(--shadow-low);
-	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-button:hover {
-	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
-}
-input {
-    background: var(--grey-dark);
-    color: var(--grey-white);
-    border-radius: 5px;
-    padding: .5rem;
-    cursor: pointer;
-    outline: -webkit-focus-ring-color #FF00F0 5px;
-    outline-color: var(--grey-dark);
-    outline-style: auto;
-    outline-width: 0px;
-    border: none;
-	box-shadow: var(--shadow-low);
-	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-input:hover {
-	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
-}
-select {
-    background: var(--grey-dark);
-    color: var(--grey-white);
-    border-radius: 5px;
-    padding: .5rem;
-    cursor: pointer;
-    outline: -webkit-focus-ring-color #FF00F0 5px;
-    outline-color: var(--grey-dark);
-    outline-style: auto;
-    outline-width: 0px;
-    border: none;
-	box-shadow: var(--shadow-low);
-	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-}
-select:hover {
-	box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
 
+button:hover {
+	box-shadow: var(--shadow-high);
+	/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+
+input {
+	background: var(--grey-dark);
+	color: var(--grey-white);
+	border-radius: 5px;
+	padding: .5rem;
+	cursor: pointer;
+	outline: -webkit-focus-ring-color #FF00F0 5px;
+	outline-color: var(--grey-dark);
+	outline-style: auto;
+	outline-width: 0px;
+	border: none;
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+input:hover {
+	box-shadow: var(--shadow-high);
+	/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+
+select {
+	background: var(--grey-dark);
+	color: var(--grey-white);
+	border-radius: 5px;
+	padding: .5rem;
+	cursor: pointer;
+	outline: -webkit-focus-ring-color #FF00F0 5px;
+	outline-color: var(--grey-dark);
+	outline-style: auto;
+	outline-width: 0px;
+	border: none;
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+select:hover {
+	box-shadow: var(--shadow-high);
+	/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
 
 .app-header {
 	/* grid-column: header-start / header-end; */
@@ -120,7 +131,7 @@ select:hover {
 }
 
 .app-title {
-    font-size: 2rem;
+	font-size: 2rem;
 	text-align: left;
 	font-family: 'Monoton', monospace;
 }
@@ -132,7 +143,7 @@ select:hover {
 
 .app-icon {
 	width: 2.5rem;
-    height: 2.5rem;
+	height: 2.5rem;
 	margin-top: 5px;
 	/* margin-right: 1rem;
   margin-top: 1.4rem; */
@@ -145,7 +156,6 @@ select:hover {
 	padding: 0px;
 	height: 100%;
 	display: grid;
-
 	justify-content: center;
 	grid-template-columns: 1fr 9fr;
 }
@@ -161,18 +171,24 @@ select:hover {
 	fill: var(--green);
 	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
+
 /* .side svg:nth-child(4n+1) {fill: var(--green);} */
+
 /* .side svg:nth-child(4n+2) {fill: var(--blue);} */
+
 /* .side svg:nth-child(4n+3) {fill: var(--yellow);} */
+
 /* .side svg:nth-child(4n+4) {fill: var(--pink);} */
 
-.side svg:hover {
+.side svg:hover, .side svg.active {
 	-webkit-filter: var(--shadow-drop);
 	filter: var(--shadow-drop);
 }
+
 .side path {
 	fill: var(--pink);
 }
+
 .side use {
 	max-width: 100%;
 	max-height: 100%;
@@ -182,6 +198,14 @@ select:hover {
 .main {
 	padding: 1%;
 	background: lightGrey;
+}
+
+.cmp {
+	display: none;
+}
+
+.cmp.active {
+	display: block;
 }
 
 ::-webkit-scrollbar-track {
@@ -202,15 +226,17 @@ select:hover {
 }
 
 .card {
-    border-radius: 5px;
-    max-width: 100%;
-    /* min-height: 20rem; */
-    background: #fff;
-    margin: 1rem;
+	border-radius: 5px;
+	max-width: 100%;
+	/* min-height: 20rem; */
+	background: #fff;
+	margin: 1rem;
 	padding: 1rem;
-    box-shadow: var(--shadow-low);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	box-shadow: var(--shadow-low);
+	transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
+
 .card:hover {
-    box-shadow: var(--shadow-high);/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+	box-shadow: var(--shadow-high);
+	/*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
 }
