@@ -3,29 +3,28 @@
 
 const icons = {
     home: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="aquamarine"
+        <path fill="var(--green)"
             d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/><path d="M0 0h24v24H0z">
         </path>
     </svg>`,
     delete: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="aquamarine"
+        <path fill="var(--green)"
             d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
             <path d="M0 0h24v24H0z"/>
         </path>
     </svg>`,
     edit: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="aquamarine" 
+        <path fill="var(--green)" 
             d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z">
         </path>
     </svg>`,
-    add: `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="aquamarine" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+    add: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+        <path fill="var(--green)" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
         <path fill="none" d="M0 0h24v24H0z"></path>
     </svg>`
 }
 
-const style = `
+const style = /* html */`
 
 <link rel="stylesheet" href="../shared/shared.css"/>
 <style>
@@ -45,84 +44,87 @@ const style = `
 }
 .area.active {
     display: block;
-    background: #f2f2f2;
     padding: 0.5rem;
 }
-.addLink {
+
+.cmp-header {
+    vertical-align: middle;
+    display: -webkit-inline-box;
+    width: -webkit-fill-available;
+    padding: 0rem 0rem .25rem .5rem;
+}
+.cmp-header > .name {
+    line-height: 2;
+    font-weight: 600;
+    font-size: 1.5rem;
+    padding-right: 1.2rem;
+    vertical-align: bottom;
+}
+.new {
+    width: 99.4%;
+    height: 2rem;
+    border-radius: 5px;
+    padding: .5rem 0rem 0rem .5rem;
+}
+.new > input, .new > svg {
+    vertical-align: middle;
+}
+.new > input {
+    width: 7rem;
+    max-width: 420px;    
+    vertical-align: bottom;
+    transition: all 1s cubic-bezier(.25, .8, .25, 1);
+}
+
+svg {
     cursor: pointer;
+    fill: var(--green);
+    transform: scale(1);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
-.links {
-    padding-inline-start: 0px;
-}
-.notes {
-    width: 100%;
-    height: 7rem;
-    max-width: 100%;
-    border-radius: 5px;
-}
-.preview {
-    left: -400px;
-    top: -300;
-    width: 2500px;
-    height: 1260;
-    transform: scale(.25);
-    z-index: 999;
-    position: absolute;
-    border-radius: 5px;
-    background: var(--grey-dark);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-}
-.frame {
-    width: 100%;
-    height: 100%;
-}
-.hide {
-    display: none;
+svg:hover, svg.active {
+    transform: scale(2);
+    filter: var(--shadow-drop);
+    -webkit-filter: var(--shadow-drop);
 }
 </style>
 `
 
-console.log('wopwopwowpwopwop')
 const template = document.createElement('template')
-//template.innerHTML = `<div class="card"><div class="header"></div><table><thead></thead><tbody></tbody></table></div>`
-template.innerHTML = `
+template.innerHTML = /* html */`
 
-
-${style}
-<div class="card">
-    <h2>Projects</h2>
-    <select class="projects"></select>
-    <div class="area">
+    ${style}
+    
+    <div class="card">
         
+        <div class="cmp-header">
+            <span class="name">Projects</span>
+            <div class="new">
+                <input class="pName" placeholder="New Project Name..." />
+                <span class="save">${icons.add}</span>
+            </div>
+        </div>
+    
         <div class="actions">
+            <select class="projects"></select>
             <span class="delete">${icons.delete}</span>
         </div>
+        <br />
 
-        <h3>Links</h3>
-        <ul class="links"></ul>
-        <div><input class="link" type="url" placeholder="URL to add (https://example.com)" /><span class="addLink">${icons.add}</span></div>
-        
+        <div class="area">
+            
+            <project-tasks></project-tasks>
+            <br />
 
-        <h3>Notes</h3>
-        <div><textarea class="notes" placeholder="Notes for project" ></textarea></div>
+            <project-notes></project-notes>
+            <br />
 
-        <project-tasks></project-tasks>
+            <project-links></project-links>
+            <br />
 
+        </div>
     </div>
-    <br /><br />
-    <section>
-        <h2>New Project</h2>
-        <input class="pName" placeholder="Project Name"/>
-        <br /><br />
-        <button class="save">Save</button>
-    </section>
-    
-    <div class="preview hide">
-        <iframe class="frame hide" src="https://www.example.com" />
-    </div>
-
-</div>
-`.trim()
+`
 
 export class MyProjects extends HTMLElement {
     
@@ -139,33 +141,29 @@ export class MyProjects extends HTMLElement {
     }
 
     connectedCallback() {
-        console.log('connectedCallback')
-        this.shadowRoot.appendChild(template.content.cloneNode(true))
         
+        this.shadowRoot.appendChild(template.content.cloneNode(true))        
         this.initElements(this.shadowRoot)
     }
+
     initElements(doc){
 
         chrome.storage.sync.get(['projects'], bin => 
-            Array.isArray(bin.projects) ? this.buildProjects(bin) : chrome.storage.sync.set({ projects:[] }, () => console.log('setup projects')))
+            Array.isArray(bin.projects) ? this.buildProjects(bin) : chrome.storage.sync.set({ projects:[] }))
 
         this.dom = {
             card: doc.querySelector('.card'),
             projects: doc.querySelector('.projects'),
             actions: doc.querySelector('.actions'),
             delete: doc.querySelector('.delete'),
-            link: doc.querySelector('.link'),
-            links: doc.querySelector('.links'),
-            notes: doc.querySelector('.notes'),
-            addLink: doc.querySelector('.addLink'),
             tbody: doc.querySelector('tbody'),
             thead: doc.querySelector('thead'),
             pName: doc.querySelector('.pName'),
             save: doc.querySelector('.save'),
             area: doc.querySelector('.area'),
-            preview: doc.querySelector('.preview'),
-            frame: doc.querySelector('.frame'),
-            task: doc.querySelector('project-tasks')
+            task: doc.querySelector('project-tasks'),
+            links: doc.querySelector('project-links'),
+            notes: doc.querySelector('project-notes')
         }
 
         this.registerListeners()
@@ -187,15 +185,17 @@ export class MyProjects extends HTMLElement {
     registerListeners(){
                 
         /* On Click */
-        console.dir(this.dom)
-
         this.dom.save.onclick = () => {
             
             const name = this.dom.pName.value
+
             if(!name){
                 console.warn('Project needs a name')
                 return false
             }
+
+            this.dom.pName.value = ''
+            
             const project = {
                 name, time: [], orgs: [], tasks: [], links: [], notes: ``
             }
@@ -226,33 +226,10 @@ export class MyProjects extends HTMLElement {
                 })
             }
         }
-        this.dom.addLink.onclick = () => {
-            
-            const link = this.dom.link.value
-            if(link){
-                this.project.links.push(link)
-                this.updateProject(this.project)
-                .then(x => {
-                    console.log(x)
-                    this.buildLinks()
-                })
-            }
-        }
-        /* preview */
-        this.dom.preview.onclick = e => {
-            e.preventDefault()
-            console.log('zoomzoom')
-        }
-        this.dom.preview.ondblclick = e => {
-            e.preventDefault()
-            
-            console.log('ondblclick ')
-            window.open(this.dom.frame.src)
-        }
+
         /* card / clear higher things */
         this.dom.card.onclick = () => {
-            console.log('card click')
-            this.dom.preview.classList.add('hide')
+            this.dom.links.setAttribute("preview", "hide")
         }
 
         
@@ -260,18 +237,20 @@ export class MyProjects extends HTMLElement {
         this.dom.projects.onchange = e => {
             
             const name = this.dom.projects.value
-            console.log(name)
 
             this.getProjects().then(bin => {
-                console.dir(bin.projects)
+
                 const project = bin.projects.filter(x => x.name == name)[0]
-                console.dir(project)
+
                 if(project){
                     this.project = project
-                    this.buildLinks()
-                    this.buildNotes()
+
                     this.dom.area.classList.add('active')
+                    
                     this.dom.task.setAttribute("project", name)
+                    this.dom.notes.setAttribute("project", name)
+                    this.dom.links.setAttribute("project", name)
+                    //this.dom.links.setAttribute("links", project.links)
                 }
                 else {
                     this.dom.actions.classList.remove('active')
@@ -281,14 +260,9 @@ export class MyProjects extends HTMLElement {
             localStorage.selected_project = this.dom.projects.options.selectedIndex
         }
 
-        /* On onblur */
-        this.dom.notes.onblur = e => {
-            this.project.notes = this.dom.notes.value
-            this.updateProject(this.project)
-            .then(x => {
-                console.log(x)
-            })
-        }
+        this.dom.pName._width = this.dom.pName.style.width
+        this.dom.pName.onfocus = () => this.dom.pName.style.width = `40%`
+        this.dom.pName.onblur = () => this.dom.pName.style.width = this.dom.pName._width
 
         this.ready()
     }
@@ -309,76 +283,14 @@ export class MyProjects extends HTMLElement {
         this.dom.projects.appendChild(opt(def))
         bin.projects.map(x => this.dom.projects.appendChild(opt(x.name)))
     }
-    buildLinks(){
-
-        //https://docs.google.com/spreadsheets/d/1d3ObFuJbWYyr57m9aBQ-1mGkY6ckuE0S59oEJvhtHlo/edit#gid=1438171332
-        console.dir('buildLinks')
-        console.dir(this.project)
-
-        while (this.dom.links.lastChild) {
-            this.dom.links.removeChild(this.dom.links.lastChild)
-        }
-        const link = val => {
-
-            const li = document.createElement('li')
-            const o = document.createElement('a')
-            o.href = val
-            o.textContent = val.length > 50 ? `${val.substring(0, 50)}...` : val
-            
-            //preview on hover :)
-            o.onmouseover = e => {
-            
-                if (this.dom.frame.src != o.href) {
-                
-                    this.dom.frame.classList.remove('hide')
-                    this.dom.frame.src = o.href 
-                    this.dom.frame.onload = () => {
-                        console.log('loaded')
-                        this.dom.preview.width  = this.dom.frame.contentWindow.document.body.scrollWidth
-                        this.dom.preview.height = this.dom.frame.contentWindow.document.body.scrollHeight                    
-                        this.dom.frame.width  = this.dom.frame.contentWindow.document.body.scrollWidth
-                        this.dom.frame.height = this.dom.frame.contentWindow.document.body.scrollHeight
-                    
-                    }
-                    this.dom.frame.contentWindow.location.reload(true)
-                }
-                this.dom.preview.classList.remove('hide')
-            }
-            
-            //o.onmouseout = () => this.dom.preview.classList.toggle('hide')
-            
-            li.appendChild(o)
-            
-            return li
-        }
-
-        this.project.links.map(x => this.dom.links.appendChild(link(x)))
-    }
-    buildNotes(){
-
-        console.dir('buildNotes')
-
-        this.dom.notes.value = this.project.notes
-    }
+    
     attributeChangedCallback(n, ov, nv) {
-        super.attributeChangedCallback(n, ov, nv);
-        console.dir(n)
-        console.dir(ov)
-        console.dir(nv)
-        //switch (n) {
-        //    case 'text':
-        //        this._text = nv;
-        //        this.setText(ov, nv);
-        //        break;
-        //}
+        //super.attributeChangedCallback(n, ov, nv)
     }
     ready(){
         setTimeout(() => {
-            // Use local store if set before by above
-            console.dir(this.dom.projects.options)
             this.dom.projects.options.selectedIndex = localStorage.selected_project
             this.dom.projects.onchange()
-            console.log(this.dom.projects.options.selectedIndex +' '+ localStorage.selected_project)
         }, 0)
     }
 }

@@ -1,67 +1,47 @@
 <html>
 
-<link rel="stylesheet" href="../shared/shared.css"/>
+	<link rel="stylesheet" href="../shared/shared.css"/>
 
-<title>New Fab</title>
+	<title>New Fab</title>
 
-<script type="module" src="../components/my-projects/my-projects.js"></script>
-<script type="module" src="../components/my-settings/my-settings.js"></script>
-<script type="module" src="../components/my-history/my-history.js"></script>
-<script type="module" src="../components/project-tasks/project-tasks.js"></script>
-<!-- script type="module" src="../components/my-tasks/my-tasks.js"></script -->
+	<script type="module" src="../components/my-projects/my-projects.js"></script>
+	<script type="module" src="../components/my-settings/my-settings.js"></script>
+	<script type="module" src="../components/my-history/my-history.js"></script>
+	<script type="module" src="../components/project-links/project-links.js"></script>
+	<script type="module" src="../components/project-notes/project-notes.js"></script>
+	<script type="module" src="../components/project-tasks/project-tasks.js"></script>
 
-<body class="app">
+	<body class="app">
 
-	<div class="app-header">
-		<div class="app-title">
-			<img class="app-icon" src="../shared/icon.png"/>
-			New Fab
-			<span class="app-title-message"/>
-		</div>
-	</div>
-
-	<div class="app-grid">
-
-		<div class="side">
-			<svg id="my-projects" viewBox="-15 0 100 100">
-				<use href="../components/my-projects/icon.svg#my-projects_icon"></use>
-			</svg>
-			<!--<svg  id="my-tasks" viewBox="-15 0 100 100">
-				<use href="../components/my-tasks/icon.svg#my-tasks_icon"></use>
-			</svg 			<my-tasks class="cmp"></my-tasks>
-			-->
-			<svg id="my-history" viewBox="-15 0 100 100">
-				<use href="../components/my-history/icon.svg#my-history_icon"></use>
-			</svg>
-			<svg id="my-settings" viewBox="-21 0 100 100">
-				<use href="../components/my-settings/icon.svg#my-settings_icon"></use>
-			</svg>
+		<div class="app-header">
+			<div class="app-title">
+				<img class="app-icon" src="../shared/icon.png"/>
+				New Fab
+				<span class="app-title-message"/>
+			</div>
 		</div>
 
-		<div class="main">
-			<my-projects class="cmp"></my-projects>
-			<my-history class="cmp"></my-history>
-			<my-settings class="cmp"></my-settings>
+		<div class="app-grid">
+
+			<div class="side">
+				<svg id="my-projects" viewBox="-15 0 100 100">
+					<use href="../components/my-projects/icon.svg#my-projects_icon"></use>
+				</svg>
+				<svg id="my-history" viewBox="-15 0 100 100">
+					<use href="../components/my-history/icon.svg#my-history_icon"></use>
+				</svg>
+				<svg id="my-settings" viewBox="-21 0 100 100">
+					<use href="../components/my-settings/icon.svg#my-settings_icon"></use>
+				</svg>
+			</div>
+
+			<div class="main">
+				<my-projects class="cmp"></my-projects>
+				<my-history class="cmp"></my-history>
+				<my-settings class="cmp"></my-settings>
+			</div>
 		</div>
-	</div>
-</body>
+	</body>
 
-<script src="./js/nav.js"></script>
-
-
+	<script src="./js/nav.js"></script>
 </html>
-
-
-
-<!-- 
-#ff00f0 - pink
-
-
-
-<div id="mainPopup">
-	<h1>1</h1>
-	<ul></ul>
-</div>
-
-
-<!-- script type="text/javascript" src="./browser_action.js"></script>-->

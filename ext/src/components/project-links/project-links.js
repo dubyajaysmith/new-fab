@@ -1,31 +1,11 @@
 /*
 * Use tag to import via es6 module (html import depricated in v1 spec :/ )
-* <script type="module" src="../components/project-tasks/project-tasks.js"></script>
+* <script type="module" src="../components/project-links/project-links.js"></script>
 */
 // jshint asi: true, esversion: 6, laxcomma: true 
 'use strict()'
 
 const icons = {
-    chev: `<svg viewBox="0 0 20 20" width="20" height="20">
-        <title>cheveron down</title>
-        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path>
-    </svg>`,
-    home: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="var(--green)"
-            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/><path d="M0 0h24v24H0z">
-        </path>
-    </svg>`,
-    delete: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="var(--green)"
-            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z">
-            <path d="M0 0h24v24H0z"/>
-        </path>
-    </svg>`,
-    edit: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <path fill="var(--green)" 
-            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z">
-        </path>
-    </svg>`,
     add: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
         <path fill="var(--green)" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
         <path fill="none" d="M0 0h24v24H0z"></path>
@@ -153,6 +133,32 @@ const style = {
             background-color: #bfb;
             border-color: #bfb;
         }
+
+        .addLink {
+            cursor: pointer;
+        }
+        .links {
+            padding-inline-start: 0px;
+        }
+        .hide {
+            display: none;
+        }
+        .preview {
+            left: -400px;
+            top: -300;
+            width: 2500px;
+            height: 1260;
+            transform: scale(.25);
+            z-index: 999;
+            position: absolute;
+            border-radius: 5px;
+            background: var(--grey-dark);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        }
+        .frame {
+            width: 100%;
+            height: 100%;
+        }
     `,
     links: `<link rel="stylesheet" href="../shared/shared.css"/>`
 }
@@ -166,29 +172,33 @@ template.innerHTML = /* template */`
     <div class="cmp-container">
         
         <div class="cmp-header">
-            <span class="name">Tasks</span>
+            <span class="name">Links</span>
             <div class="new">
-                <input class="title" placeholder="New task todo?" />
-                <span class="add">${icons.add}</span>
+                <input class="link" placeholder="Paste new link to save..." type="url" />
+                <span class="addLink">${icons.add}</span>
             </div>
         </div>
-
-        <div class="items"></div>
+        
+        <ul class="links"></ul>
+        
+        <div class="preview hide">
+            <iframe class="frame hide" src="https://www.example.com" />
+        </div>
     </div>
-`.trim()
+`
 
-export class ProjectTasks extends HTMLElement {
+export class ProjectLinks extends HTMLElement {
 
     constructor() {
         super()
         this.attachShadow({mode: 'open'})
     }
     static get is() {
-        return 'project-tasks'
+        return 'project-links'
     }
 
     static get observedAttributes() {
-        return ['project']
+        return ['project', 'preview', 'links']
     }
 
     connectedCallback() {
@@ -199,119 +209,73 @@ export class ProjectTasks extends HTMLElement {
     registerElements(doc){
         
         this.dom = {
-            title: doc.querySelector('.title'),
-            new: doc.querySelector('.new'),
-            add: doc.querySelector('.add'),
-            items: doc.querySelector('.items')
+            addLink: doc.querySelector('.addLink'),
+            link: doc.querySelector('.link'),
+            links: doc.querySelector('.links'),
+            preview: doc.querySelector('.preview'),
+            frame: doc.querySelector('.frame')
         }
 
         this.registerListeners()
     }
     registerListeners(){
         
-        this.dom.add.onclick = () => {
+        this.dom.addLink.onclick = () => {
             
-            const task = {
-                time: 0,
-                date: null,
-                status: false,
-                title: this.dom.title.value,
-                uid: new Date().getTime()
+            const link = this.dom.link.value
+            if(link){
+                this.dom.link.value = ''
+                this.saveLink(link)
             }
-            
-            this.dom.title.value = ''
-
-            this.saveTask(task)
         }
 
-        this.dom.title._width = this.dom.title.style.width
-        this.dom.title.onfocus = () => this.dom.title.style.width = `50%`
-        this.dom.title.onblur = () => this.dom.title.style.width = this.dom.title._width
-    }
 
-    renderTask(task){
-
-        const div = document.createElement('div')
-        div.classList.add('item')
-        if(task.date){
-            div.title = `${task.status ? 'Checked' : 'Un-checked'} on ${new Date(task.date).toLocaleString()}`
-        }
-        
-        const check = document.createElement('input')
-        check.type = 'checkbox'
-        check.id = task.uid
-        if(task.status){
-            check.checked = true
-            check.setAttribute("checked", true)
-        }
-        check.onchange = e => {
-            task.status = check.checked
-            task.date = new Date().getTime()
-            this.updateTask(task)
-        }
-        div.appendChild(check)
-        
-        const label = document.createElement('label')
-        label.setAttribute("for", check.id)
-        label.textContent = task.title
-        div.appendChild(label)
-        
-        const number = document.createElement('input')
-        number.type = 'number'
-        number.step = '.5'
-        number.value = task.time
-        number.onblur = () => {
-            task.time = number.value
-            this.updateTask(task)
-        }
-        div.appendChild(number)
-        
-        this.dom.items.appendChild(div)
+        this.dom.link._width = this.dom.link.style.width
+        this.dom.link.onfocus = () => this.dom.link.style.width = `50%`
+        this.dom.link.onblur = () => this.dom.link.style.width = this.dom.link._width
     }
     
     attributeChangedCallback(n, ov, nv) {
-        // n, ov, nv == attr name, old val, new val
         switch (n) {
             case 'project':
                 this.getProject(nv)
-                .then(pj => {
-                    
-                    const na = pj.tasks.filter(x => !x.status)
-                    const done = pj.tasks.filter(x => x.status)
-                    const tasks = [...na, ...done]// sort by status != true ? first : last
-                    tasks.map(x => this.renderTask(x))
-                })
+                .then(pj => this.rerenderLinks(pj.links))
             break
-            case 'tasks':
-                Array.from(nv).map(x => this.renderTask(x))
+            case 'links':
+                console.log(nv)
+                this.rerenderLinks(nv)
+            break
+            case 'preview':
+                this.dom.preview.classList.add(nv)
             break
         }
     }
 
-    saveTask(task){
-        this.getProject(this.getAttribute('project')).then(pj => {
-            pj.tasks.push(task)
-            this.updateProject(pj)
-            this.renderTask(task)
-        })
+    rerenderLinks(links){
+
+        while (this.dom.links.lastChild) {
+            this.dom.links.removeChild(this.dom.links.lastChild)
+        }
+
+        links.map(x => this.renderLink(x))
     }
-    updateTask(task){
+
+    saveLink(link){
         this.getProject(this.getAttribute('project')).then(pj => {
-            const rest = pj.tasks.filter(x => x.uid != task.uid)
-            const tasks = [task, ...rest]
-            pj.tasks = tasks
+            pj.links.push(link)
             this.updateProject(pj)
+            this.renderLink(link)
         })
     }
     getProject(name){
         return new Promise(res => chrome.storage.sync.get(['projects'], bin => res(bin.projects.filter(x => x.name === name)[0])))
     }
-    getProjects(){
-        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
-    }
     saveProjects(projects){
         return new Promise(res => chrome.storage.sync.set({projects}, () => 
             res(`updated projects. has ${projects.length} now.`)))
+    }
+    getProjects(){
+        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
     }
     updateProject(project){
         return new Promise(res => this.getProjects().then(bin => {
@@ -320,8 +284,40 @@ export class ProjectTasks extends HTMLElement {
             this.saveProjects(projects).then(x => res(x))
         }))
     }
+
+    renderLink(url){
+
+        const li = document.createElement('li')
+        li.classList.add('item')
+        
+        const o = document.createElement('a')
+        o.href = url
+        o.textContent = url.length > 50 ? `${url.substring(0, 50)}...` : url
+        
+        o.onmouseover = e => {
+        
+            if (this.dom.frame.src != o.href) {
+            
+                this.dom.frame.classList.remove('hide')
+                this.dom.frame.src = o.href
+                this.dom.frame.onload = () => {
+                    this.dom.preview.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                    this.dom.preview.height = this.dom.frame.contentWindow.document.body.scrollHeight                    
+                    this.dom.frame.width  = this.dom.frame.contentWindow.document.body.scrollWidth
+                    this.dom.frame.height = this.dom.frame.contentWindow.document.body.scrollHeight
+                
+                }
+                this.dom.frame.contentWindow.location.reload(true)
+            }
+            this.dom.preview.classList.remove('hide')
+        }
+                
+        li.appendChild(o)
+        
+        this.dom.links.appendChild(li)
+    }
 }
 // input[type number] doesn't increment by mousewheel without
 window.addEventListener('mousewheel', e => {})
 
-customElements.define(ProjectTasks.is, ProjectTasks)
+customElements.define(ProjectLinks.is, ProjectLinks)

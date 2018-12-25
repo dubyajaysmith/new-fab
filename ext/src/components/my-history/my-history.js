@@ -67,7 +67,6 @@ ${style}
         <iframe class="frame hide" src="https://www.example.com" />
     </div>
 </div>
-
 `
 
 export class MyHistory extends HTMLElement {
@@ -220,7 +219,7 @@ export class MyHistory extends HTMLElement {
             })
         })
 
-        this.setListeners()
+        this.registerListeners()
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv)
@@ -233,7 +232,7 @@ export class MyHistory extends HTMLElement {
         //        break;
         //}
     }
-    setListeners(){
+    registerListeners(){
 
         /* preview */
         this.dom.preview.onclick = e => {
