@@ -276,6 +276,10 @@ export class ProjectTasks extends HTMLElement {
                 this.getProject(nv)
                 .then(pj => {
                     
+                    while (this.dom.items.lastChild) {
+                        this.dom.items.removeChild(this.dom.items.lastChild)
+                    }
+
                     const na = pj.tasks.filter(x => !x.status)
                     const done = pj.tasks.filter(x => x.status)
                     const tasks = [...na, ...done]// sort by status != true ? first : last

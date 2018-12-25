@@ -33,9 +33,7 @@ const style = /* html */`
     font-size: 1.42rem;
 }
 .actions {
-    float: right;
     cursor: pointer;
-    background: grey;
     border-radius: 5px;
     padding: 0rem 1rem;
 }
@@ -96,28 +94,28 @@ template.innerHTML = /* html */`
     ${style}
     
     <div class="card">
-        
-        <div class="cmp-header">
-            <span class="name">Projects</span>
-            <div class="new">
-                <input class="pName" placeholder="New Project Name..." />
-                <span class="save">${icons.add}</span>
+        <div class="container">
+            <div class="cmp-header">
+                <span class="name">Projects</span>
+                <div class="new">
+                    <input class="pName" placeholder="New Project Name..." />
+                    <span class="save">${icons.add}</span>
+                </div>
             </div>
-        </div>
-    
-        <div class="actions">
-            <select class="projects"></select>
-            <span class="delete">${icons.delete}</span>
+            <div class="actions">
+                <select class="projects"></select>
+                <span class="delete">${icons.delete}</span>
+            </div>
         </div>
         <br />
 
         <div class="area">
             
             <project-tasks></project-tasks>
-            <br />
+            <br /><br />
 
             <project-notes></project-notes>
-            <br />
+            <br /><br />
 
             <project-links></project-links>
             <br />
@@ -156,8 +154,6 @@ export class MyProjects extends HTMLElement {
             projects: doc.querySelector('.projects'),
             actions: doc.querySelector('.actions'),
             delete: doc.querySelector('.delete'),
-            tbody: doc.querySelector('tbody'),
-            thead: doc.querySelector('thead'),
             pName: doc.querySelector('.pName'),
             save: doc.querySelector('.save'),
             area: doc.querySelector('.area'),
