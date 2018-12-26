@@ -2,8 +2,15 @@
 //'use strict()'
 
 const style = `
-    <link rel="stylesheet" href="../shared/shared.css"/>
-    <style></style>
+<link rel="stylesheet" href="../shared/shared.css"/>
+<style>
+        
+    section {
+        padding: 0.1rem 0.5rem 1.5rem 0.5rem;
+        border-radius: 5px;
+        background: var(--grey-white);
+    }
+</style>
 `
 
 const template = document.createElement('template')
@@ -11,13 +18,16 @@ template.innerHTML = `
 ${style}
 <div class="card">
     <h2>Settings</h2>
-    <h3>todo : load other components, theme</h3>
+    <h3>Hey, what gives?</h3>
 
     <section>
+        Sorry. This is just a placeholder for now. Check back later :)
+        <!--
         <h3>Modules</h3>
         <div></div>
         <button class="install">Install Module</button>
         <input class="getModule" type="file" style="display:none;" />
+        -->
     </section>
 </div>`
 

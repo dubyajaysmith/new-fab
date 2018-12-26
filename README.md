@@ -1,14 +1,22 @@
-# New Fab (WIP)
+# New Fab
 
-## A work in progress building of a new tab page taking advantage of web components
+## A new tab extension
 
-Building out first components I'd like for work and projects using native web component's new v1 spec.
+Building out initial web-components (WCs) using v1 spec I'd like for work & projects
 
 ### State
 
-* Still lots todo
-* Project component (and it's components) is about there
-* Want to tackle bookmark & history next
-* also build out [backend](https://github.com/dubyajaysmith/new-fab-service "backend") to sync along with chrome syncs
+#### There
+
+* Project components are about there
+
+#### Not There
+
+* Started: bookmark component(s). When that's done web store listing can go out of private
+* Do-able: A small [backend](https://github.com/dubyajaysmith/new-fab-service) to sync when chrome syncs if wanted => login thru Settings to sync firefox, chrome, mobile
+* Moonshot: replace small express backend for [Solid](https://github.com/solid/) if/when viable
+* Moonshot: load WC views built for it through Settings with additional permissons under optional in manifest to ask for
 
 ![screenie](https://i.imgur.com/AOHIE9G.png)
+
+![screenie](https://i.imgur.com/Qp8mQwo.png)

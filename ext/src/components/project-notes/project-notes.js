@@ -46,10 +46,14 @@ const style = /* html */`
     .notes {
         border:none;
         height: 8rem;
+        background: inherit;
         max-width: inherit;
         width: 100% !important;
         min-width: 100% !important;
         border-radius: 0px 0px 5px 5px;
+    }
+    .notes:focus {
+        outline: none;
     }
 </style>`
 
