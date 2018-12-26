@@ -35,7 +35,7 @@ const style = /* html */`
 .actions {
     cursor: pointer;
     border-radius: 5px;
-    padding: 0rem 1rem;
+    padding: 0rem 0.45rem;
 }
 .area {
     display: none;
@@ -201,12 +201,12 @@ export class MyProjects extends HTMLElement {
                 const projects = [project, ...bin.projects]
                 
                 this.saveProjects(projects)
-                    .then(() => this.getProjects()
+                    .then(() => this.getProjects())
                     .then(x => {
                         this.buildProjects(x)
                         this.dom.projects.value = name
                         this.dom.projects.onchange()
-                    }))
+                    })
             })
         }
         this.dom.delete.onclick = () => {

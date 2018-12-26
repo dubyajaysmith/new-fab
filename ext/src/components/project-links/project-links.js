@@ -7,167 +7,143 @@
 
 const icons = {
     add: `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-        <path fill="var(--green)" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+        <path fill="#FFF" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
         <path fill="none" d="M0 0h24v24H0z"></path>
     </svg>`
 }
 
-const style = {
-    css: `
+const style = /* html */`
+    
+<style>
 
-        .cmp-container {
-            border-radius: 5px;
-            box-shadow: var(--shadow-low);
-            background: var(--grey-lightest);
-            border: 1px solid var(--grey-light);
-        }
-        .cmp-header {
-            width: -webkit-fill-available;
-            vertical-align: middle;
-            display: -webkit-inline-box;
-            padding: 0rem 0rem .25rem .5rem;
-        }
-        .cmp-header > .name {
-            line-height: 2;
-            font-weight: 600;
-            font-size: 1.5rem;
-            padding-right: 1.2rem;
-            vertical-align: bottom;
-        }
+    .cmp-container {
+        border-radius: 5px;
+        box-shadow: var(--shadow-low);
+        padding: 0.2rem;
+        border: var(--blue);
+        background: var(--blue);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
+    .cmp-container:hover {
+        -webkit-filter: var(--shadow-drop);
+        filter: var(--shadow-drop);
+    }
+    .cmp-header {
+        width: -webkit-fill-available;
+        vertical-align: middle;
+        display: -webkit-inline-box;
+        padding: 0rem 0rem .25rem .5rem;
+    }
+    .cmp-header > .name {
+        color: #FFF;
+        line-height: 2;
+        font-weight: 600;
+        font-size: 1.5rem;
+        padding-right: 1.2rem;
+        vertical-align: bottom;
+    }
 
-        .new {
-            width: 99.4%;
-            height: 2rem;
-            border-radius: 5px;
-            padding: .5rem 0rem 0rem .5rem;
-        }
-        .new > input, .new > svg {
-            vertical-align: middle;
-        }
-        .new > input {
-            width: 7rem;
-            max-width: 420px;    
-            vertical-align: bottom;
-        	transition: all 1s cubic-bezier(.25, .8, .25, 1);
-        }
-        
-        .item:last-child {
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-        }
-        .item > input[type=checkbox] {
-            transform: scale(2);
-            fill: var(--green);
-            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-        }
-        .item > input[type=checkbox]:hover, .item > input[type=checkbox].active {
-            transform: scale(3);
-            -webkit-filter: var(--shadow-drop);
-            filter: var(--shadow-drop);
-        }
-        .item > input[type=number] {
-            width: 5rem;
-            height: 1.75rem;
-            margin-left: 2rem;
-            vertical-align: super;
-        }
-        .item:nth-child(odd) {
-            border: var(--grey-light);
-            background: var(--grey-light);
-        }
-        .item:nth-child(even) {
-            border: var(--grey-lightest);
-            background: var(--grey-lightest);
-        }
+    .new {
+        width: 99.4%;
+        height: 2rem;
+        border-radius: 5px;
+        padding: .5rem 0rem 0rem .5rem;
+    }
+    .new > input, .new > svg {
+        cursor: pointer;
+        vertical-align: middle;
+    }
+    .new > input {
+        width: 7rem;
+        padding: 0.2rem;
+        max-width: 420px;
+        vertical-align: bottom;
+        transition: all 1s cubic-bezier(.25, .8, .25, 1);
+        border-radius: 5px;
+        border: none;
+        font-size: 1rem;
+        vertical-align: top;
+        line-height: 2rem;
+        width: 7rem;
+    }
 
-        svg {
-            cursor: pointer;
-            fill: var(--green);
-            transform: scale(1);
-            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-        }
-        svg:hover, svg.active {
-            transform: scale(2);
-            filter: var(--shadow-drop);
-            -webkit-filter: var(--shadow-drop);
-        }
+    ul {
+        -webkit-margin-before: 0px;
+        -webkit-margin-after: 0px;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        -webkit-padding-start: 0px;
+        list-style-type: none;
+        width: 100%;
+        padding-inline-start: 0px;
+    }
 
-        input[type=checkbox]+label {
-            margin: 0.2em;
-            padding: 0.2em;
-            cursor: pointer;
-            font-size: 1.25rem;
-            display: inline-block;
-        }
-        input[type=checkbox] {
-            display: none;
-        }
-        input[type=checkbox]+label:before {
-            width: 1em;
-            height: 1em;
-            content: "\\2714";
-            border: 0.1em solid #000;
-            border-radius: 0.2em;
-            display: inline-block;
-            padding-left: 0.2em;
-            padding-bottom: 0.3em;
-            margin-right: 0.2em;
-            vertical-align: bottom;
-            color: transparent;
-            transition: .2s;
-        }
-        input[type=checkbox]+label:active:before {
-            transform: scale(0);
-        }
-        input[type=checkbox]:checked+label:before {
-            background-color: var(--green);
-            border-color: var(--green);
-            color: #fff;
-        }
-        input[type=checkbox]:disabled+label:before {
-            transform: scale(1);
-            border-color: #aaa;
-        }
-        input[type=checkbox]:checked:disabled+label:before {
-            transform: scale(1);
-            background-color: #bfb;
-            border-color: #bfb;
-        }
+    li {
+        padding: .5rem;
+        font-size: .8rem;
+        cursor: pointer;
+        background: var(--grey-white);
+        list-style-type: none;
+    }
+    a {
+        color: var(--blue);
+    }
+    
+    svg {
+        cursor: pointer;
+        fill: var(--green);
+        transform: scale(1);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
+    svg:hover, svg.active {
+        transform: scale(2);
+        filter: var(--shadow-drop);
+        -webkit-filter: var(--shadow-drop);
+    }
 
-        .addLink {
-            cursor: pointer;
-        }
-        .links {
-            padding-inline-start: 0px;
-        }
-        .hide {
-            display: none;
-        }
-        .preview {
-            left: -400px;
-            top: -300;
-            width: 2500px;
-            height: 1260;
-            transform: scale(.25);
-            z-index: 999;
-            position: absolute;
-            border-radius: 5px;
-            background: var(--grey-dark);
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-        }
-        .frame {
-            width: 100%;
-            height: 100%;
-        }
-    `,
-    links: `<link rel="stylesheet" href="../shared/shared.css"/>`
-}
+    
+    .item:last-child {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+    .item:nth-child(odd) {
+        border: #FFF;
+        background: #FFF;
+    }
+    .item:nth-child(even) {
+        border: var(--grey-lightest);
+        background: var(--grey-lightest);
+    }
+
+    .hide {
+        display: none;
+    }
+    .preview {
+        width: 50%;
+        height: 500px;
+        max-height: fit-content;
+        /* transform: scale(.25); */
+        z-index: 999;
+        position: fixed;
+        border-radius: 5px;
+        background: var(--grey-dark);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        left: 50%;
+        top: 50%;
+        transform: scale(.75);
+    }
+    .frame {
+        width: 100%;
+        height: 100%;
+    }
+    </style>
+`
+
 
 const template = document.createElement('template')
 template.innerHTML = /* template */`
 
-    ${style.links}
-    <style>${style.css}</style>
+    ${style}
 
     <div class="cmp-container">
         

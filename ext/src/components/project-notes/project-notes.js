@@ -12,45 +12,51 @@ const icons = {
     </svg>`
 }
 
-const style = {
-    css: `
+const style = /* html */`
+    
+<style>
 
-        .cmp-container {
-            border-radius: 5px;
-            box-shadow: var(--shadow-low);
-            background: var(--grey-lightest);
-            border: 1px solid var(--grey-light);
-        }
-        .cmp-header {
-            vertical-align: middle;
-            display: -webkit-inline-box;
-            width: -webkit-fill-available;
-            padding: 0rem 0rem .25rem .5rem;
-        }
-        .cmp-header > .name {
-            line-height: 2;
-            font-weight: 600;
-            font-size: 1.5rem;
-            padding-right: 1.2rem;
-            vertical-align: bottom;
-        }
-        
-        .notes {
-            height: 8rem;
-            max-width: inherit;
-            width: 100% !important;
-            min-width: 100% !important;
-            border-radius: 0px 0px 5px 5px;
-        }
-    `,
-    links: `<link rel="stylesheet" href="../shared/shared.css"/>`
-}
+    .cmp-container {
+        border-radius: 5px;
+        box-shadow: var(--shadow-low);
+        padding: 0.2rem;
+        border: var(--yellow);
+        background: var(--yellow);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
+    .cmp-container:hover {
+        -webkit-filter: var(--shadow-drop);
+        filter: var(--shadow-drop);
+    }
+    .cmp-header {
+        width: -webkit-fill-available;
+        vertical-align: middle;
+        display: -webkit-inline-box;
+        padding: 0rem 0rem .25rem .5rem;
+    }
+    .cmp-header > .name {
+        color: var(--grey-dark);
+        line-height: 2;
+        font-weight: 600;
+        font-size: 1.5rem;
+        padding-right: 1.2rem;
+        vertical-align: bottom;
+    }
+
+    .notes {
+        border:none;
+        height: 8rem;
+        max-width: inherit;
+        width: 100% !important;
+        min-width: 100% !important;
+        border-radius: 0px 0px 5px 5px;
+    }
+</style>`
 
 const template = document.createElement('template')
 template.innerHTML = /* template */`
 
-    ${style.links}
-    <style>${style.css}</style>
+    ${style}
 
     <div class="cmp-container">
         
