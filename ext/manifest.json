@@ -1,7 +1,7 @@
 {
   "name": "New Fab",
   "version": "0.0.0.3",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "description": "A fab new tab page using web components 🦄",
   "homepage_url": "https://github.com/dubyajaysmith/new-fab",
   "git": "https://github.com/dubyajaysmith/new-fab",
