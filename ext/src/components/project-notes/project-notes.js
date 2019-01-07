@@ -147,7 +147,5 @@ export class ProjectLinks extends HTMLElement {
     }
 
 }
-// input[type number] doesn't increment by mousewheel without
-window.addEventListener('mousewheel', e => {})
 
 customElements.define(ProjectLinks.is, ProjectLinks)

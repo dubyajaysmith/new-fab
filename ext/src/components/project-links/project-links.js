@@ -157,9 +157,11 @@ template.innerHTML = /* template */`
         
         <ul class="links"></ul>
         
+        <!-- 
         <div class="preview hide">
             <iframe class="frame hide" src="https://www.example.com" />
         </div>
+        -->
     </div>
 `
 
@@ -188,8 +190,8 @@ export class ProjectLinks extends HTMLElement {
             addLink: doc.querySelector('.addLink'),
             link: doc.querySelector('.link'),
             links: doc.querySelector('.links'),
-            preview: doc.querySelector('.preview'),
-            frame: doc.querySelector('.frame')
+            //preview: doc.querySelector('.preview'),
+            //frame: doc.querySelector('.frame')
         }
 
         this.registerListeners()
@@ -204,8 +206,8 @@ export class ProjectLinks extends HTMLElement {
                 this.saveLink(link)
             }
         }
-
-
+        // also save on enter and handle width animation
+        this.dom.link.onkeyup = e => e.keyCode == 13 && this.dom.link.value ? this.dom.addLink.onclick() : null
         this.dom.link._width = this.dom.link.style.width
         this.dom.link.onfocus = () => this.dom.link.style.width = `50%`
         this.dom.link.onblur = () => this.dom.link.style.width = this.dom.link._width
@@ -221,9 +223,9 @@ export class ProjectLinks extends HTMLElement {
                 console.log(nv)
                 this.rerenderLinks(nv)
             break
-            case 'preview':
-                this.dom.preview.classList.add(nv)
-            break
+            //case 'preview':
+            //    this.dom.preview.classList.add(nv)
+            //break
         }
     }
 
@@ -270,7 +272,7 @@ export class ProjectLinks extends HTMLElement {
         o.href = url
         o.textContent = url.length > 50 ? `${url.substring(0, 50)}...` : url
         
-        o.onmouseover = e => {
+        /* const check = e => {
         
             if (this.dom.frame.src != o.href) {
             
@@ -287,13 +289,12 @@ export class ProjectLinks extends HTMLElement {
             }
             this.dom.preview.classList.remove('hide')
         }
+        o.addEventListener('mouseover', check, {passive: true}) */
                 
         li.appendChild(o)
         
         this.dom.links.appendChild(li)
     }
 }
-// input[type number] doesn't increment by mousewheel without
-window.addEventListener('mousewheel', e => {})
 
 customElements.define(ProjectLinks.is, ProjectLinks)

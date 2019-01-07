@@ -239,6 +239,10 @@ export class ProjectTasks extends HTMLElement {
 
             this.saveTask(task)
         }
+        // also save on enter
+        this.dom.title.onkeyup = e => e.keyCode == 13 && this.dom.title.value ? this.dom.add.onclick() : null
+
+
 
         this.dom.title._width = this.dom.title.style.width
         this.dom.title.onfocus = () => this.dom.title.style.width = `50%`
@@ -296,6 +300,8 @@ export class ProjectTasks extends HTMLElement {
                         this.dom.items.removeChild(this.dom.items.lastChild)
                     }
 
+                    if(!pj){return}
+
                     const na = pj.tasks.filter(x => !x.status)
                     const done = pj.tasks.filter(x => x.status)
                     const tasks = [...na, ...done]// sort by status != true ? first : last
@@ -341,7 +347,7 @@ export class ProjectTasks extends HTMLElement {
         }))
     }
 }
-// input[type number] doesn't increment by mousewheel without
-window.addEventListener('mousewheel', e => {})
+// input[type number] doesn't increment by mousewheel without? passive for proform
+window.addEventListener('mousewheel', e => {}, {passive: true})
 
 customElements.define(ProjectTasks.is, ProjectTasks)

@@ -1,6 +1,34 @@
 // jshint asi: true, esversion: 6, laxcomma: true
 
 console.log('background.js --> New Fab background does nothing right now')
+chrome.extension.connectNative('newfab')
+const breaker = { breaker: "just a break, howdy" }
+
+chrome.runtime.onMessage.addListener((request, sender) => {
+	console.dir('hello from background, haz message')
+	console.dir(sender)
+	console.dir(request)
+
+	if(request.type == 'info'){
+		const port = chrome.runtime.connectNative('jamiesmith.app.newfab')
+
+		port.postMessage(request.value)
+
+		port.onMessage.addListener(message => {
+			console.log(message)
+		})
+
+		port.onDisconnect.addListener(error => {
+			console.dir(error)
+			console.dir(chrome.runtime.lastError.message)
+		})
+
+
+	}
+
+})
+
+
 
 /* TODOs
 

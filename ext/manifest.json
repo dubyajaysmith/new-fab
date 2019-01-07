@@ -4,7 +4,6 @@
   "manifest_version": 2,
   "description": "A fab new tab page using web components 🦄",
   "homepage_url": "https://github.com/dubyajaysmith/new-fab",
-  "git": "https://github.com/dubyajaysmith/new-fab",
   "icons": {
     "16": "src/shared/icon.png",
     "48": "src/shared/icon.png",
@@ -12,7 +11,7 @@
   },
   "default_locale": "en",
   "background": {
-    "page": "src/bg/background.html",
+    "scripts": [ "src/bg/background.js" ],
     "persistent": true
   },
   "browser_action": {
@@ -23,7 +22,8 @@
   "permissions": [
     "storage",
     "bookmarks",
-    "history"
+    "history",
+    "nativeMessaging"
   ],
   "chrome_url_overrides" : {
     "newtab": "src/browser_action/browser_action.html"

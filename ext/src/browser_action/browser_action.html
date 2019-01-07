@@ -1,15 +1,22 @@
 <html>
 
-	<link rel="stylesheet" href="../shared/shared.css"/>
+	<link rel="stylesheet" href="browser_action.css"/>
 
 	<title>New Fab</title>
+	<link rel="icon" href="../shared/icon_128x128.png"/>
 
-	<script type="module" src="../components/my-projects/my-projects.js"></script>
-	<script type="module" src="../components/my-settings/my-settings.js"></script>
-	<script type="module" src="../components/my-history/my-history.js"></script>
+	<script type="module" src="../components/fab-home/fab-home.js"></script>
+
+	<script type="module" src="../components/fab-projects/fab-projects.js"></script>
 	<script type="module" src="../components/project-links/project-links.js"></script>
 	<script type="module" src="../components/project-notes/project-notes.js"></script>
 	<script type="module" src="../components/project-tasks/project-tasks.js"></script>
+
+	<script type="module" src="../components/fab-calendar/fab-calendar.js"></script>
+
+	
+	<script type="module" src="../components/my-settings/my-settings.js"></script>
+	<script type="module" src="../components/my-history/my-history.js"></script>
 
 	<body class="app">
 
@@ -24,8 +31,8 @@
 		<div class="app-grid">
 
 			<div class="side">
-				<svg id="my-projects" viewBox="-15 0 100 100">
-					<use href="../components/my-projects/icon.svg#my-projects_icon"></use>
+				<svg id="fab-home" viewBox="-15 0 100 100">
+					<use href="../components/fab-home/icon.svg#fab-home"></use>
 				</svg>
 				<svg id="my-history" viewBox="-15 0 100 100">
 					<use href="../components/my-history/icon.svg#my-history_icon"></use>
@@ -36,12 +43,14 @@
 			</div>
 
 			<div class="main">
-				<my-projects class="cmp"></my-projects>
+				<fab-home class="cmp"></fab-home>
 				<my-history class="cmp"></my-history>
 				<my-settings class="cmp"></my-settings>
+
 			</div>
 		</div>
 	</body>
 
-	<script src="./js/nav.js"></script>
+	<script src="../script/nav.js"></script>
+
 </html>

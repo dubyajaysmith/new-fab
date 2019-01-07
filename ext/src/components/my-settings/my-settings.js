@@ -2,9 +2,23 @@
 //'use strict()'
 
 const style = `
-<link rel="stylesheet" href="../shared/shared.css"/>
 <style>
         
+    .card {
+        border-radius: 5px;
+        max-width: 100%;
+        /* min-height: 20rem; */
+        background: #fff;
+        margin: 1rem;
+        padding: 1rem;
+        box-shadow: var(--shadow-low);
+        transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+    }
+
+    .card:hover {
+        box-shadow: var(--shadow-high);
+        /*  0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+    }   
     section {
         padding: 0.1rem 0.5rem 1.5rem 0.5rem;
         border-radius: 5px;
@@ -21,7 +35,10 @@ ${style}
     <h3>Hey, what gives?</h3>
 
     <section>
-        Sorry. This is just a placeholder for now. Check back later :)
+        Sorry. This is still a placeholder and testing ground for features. Check back later :)
+        <br/>
+        <br/>
+        <button class="test">Test Native App</button>
         <!--
         <h3>Modules</h3>
         <div></div>
@@ -46,44 +63,47 @@ export class MySettings extends HTMLElement {
         
     }
 
-    connectedCallback() { console.log('my-settings connected')
-        
+    connectedCallback() {
+                
         this.shadowRoot.appendChild(template.content.cloneNode(true))
-        this.initElements(this.shadowRoot)
+        this.registerElements()
     }
-    initElements(doc){ // console.log('initElements')
+    registerElements(doc){ // console.log('initElements')
 
         this.dom = {
-            name: doc.querySelector('.name')
-            ,install: doc.querySelector('.install')
-            ,getModule: doc.querySelector('.getModule')
+            test: this.shadowRoot.querySelector('.test')
+            ,name: this.shadowRoot.querySelector('.name')
+            ,install: this.shadowRoot.querySelector('.install')
+            ,getModule: this.shadowRoot.querySelector('.getModule')
         }
+        
+        
+        this.registerListeners()
+    }
+    registerListeners(){
 
-        this.dom.install.onclick = () => this.dom.getModule.click()
+        this.dom.test.onclick = () => {
+            chrome.runtime.sendMessage({
+                type: "info",
+                value: "Hello there :)"
+            })
+            console.dir('message set');console.dir(chrome);
+        }
+        //this.dom.install.onclick = () => this.dom.getModule.click()
             
-        this.dom.getModule.onchange = () => {
+        /* this.dom.getModule.onchange = () => {
             const file = this.dom.getModule.files[0]
             if(!file){
                 console.log('no file')
                 return
             }
 
-            const imgurl = "https://www.google.com.hk/images/srpr/logo11w.png";
-            chrome.downloads.download({url:imgurl}, downloadId => {
-            })
-        }
+            //const imgurl = "https://www.google.com.hk/images/srpr/logo11w.png"
+            //chrome.downloads.download({url:imgurl}, downloadId => {})
+        } */
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv)
-        console.dir(n)
-        console.dir(ov)
-        console.dir(nv)
-        //switch (n) {
-        //    case 'text':
-        //        this._text = nv;
-        //        this.setText(ov, nv);
-        //        break;
-        //}
     }
 }
 customElements.define(MySettings.is, MySettings)

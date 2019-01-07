@@ -10,11 +10,10 @@ dom.navs = Array.from(dom.side.querySelectorAll('svg'))
 dom.cmps = Array.from(dom.main.children)
 
 dom.navs.map(n => n.onclick = () => {
-    dom.navs.map(el => {
-        console.log(el.id + ' ' + n.id)
-        el.id !== n.id ? el.classList.remove('active') : el.classList.add('active')
-    })
+    
     dom.cmps.map(x => n.id == x.localName ? x.classList.add('active') : x.classList.remove('active'))
+
+    dom.navs.map(el => el.id !== n.id ? el.classList.remove('active') : el.classList.add('active'))
 })
 
 dom.navs[0].onclick()

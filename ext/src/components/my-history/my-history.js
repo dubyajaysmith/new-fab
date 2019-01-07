@@ -1,9 +1,4 @@
 // jshint asi: true, esversion: 6, laxcomma: true 
-
-/*
-* Use tag to import via es6 module (html import depricated in v1 spec :/ )
-* <script type="module" src="../components/my-projects/my-projects.js"></script>
-*/
 'use strict()'
 
 const icons = {
@@ -131,12 +126,6 @@ template.innerHTML = /* html */`
             </div>
             <div class="books"></div>
             <br/>
-            
-            <div class="cmp-header">
-                <span class="name">Recent</span>
-            </div>
-            <div class="recent"></div>
-            <br/>
 
         </div>
     </div>
@@ -158,44 +147,41 @@ export class MyHistory extends HTMLElement {
     }
 
     connectedCallback() {
+
         this.shadowRoot.appendChild(template.content.cloneNode(true))
-        
-        this.initElements(this.shadowRoot)
+        this.registerElements(this.shadowRoot)
     }
 
-    initElements(doc){
+    registerElements(doc){
         
         this.dom = {
             card: doc.querySelector('.card'),
             books: doc.querySelector('.books'),
             recent: doc.querySelector('.recent'),
+            accordion: document.createElement('section')
         }
 
-        console.log(this.is)
         this.buildBookmarks()
-        this.buildRecent()
         this.registerListeners()
     }
 
     buildBookmarks(){
 
-        chrome.bookmarks.getTree(res => this.dom.books.appendChild(this.mkAccordion(res)))
-
+        chrome.history.search({text:'', maxResults: 35}, res => this.mkAccordion(res))
+        chrome.bookmarks.getTree(res => this.mkAccordion(res[0].children))
     }
 
-    buildRecent(){
-        
-        chrome.history.search({text:'', maxResults: 35}, res => this.dom.recent.appendChild(this.mkAccordion(res)))
-
-    }
     mkAccordion(data){
+        
 
-        const accordion = document.createElement('section')
-        accordion.classList.add('accordion')
+        //const accordion = document.createElement('section')
+        this.dom.accordion.classList.add('accordion')
 
-        data.map(x => {
+        if(!data[0].children){
 
-            x.children.map(x => {
+            //console.log('IF => data histolry')
+            //console.dir(data)
+            
 
             const group = document.createElement('section')
             group.classList.add('group')
@@ -205,7 +191,7 @@ export class MyHistory extends HTMLElement {
             
             const text = document.createElement('span')
             heading.classList.add('heading-text')
-            text.textContent = x.title
+            text.textContent = 'Recents'
             heading.appendChild(text)
             
             const chev = document.createElement('span')
@@ -217,53 +203,131 @@ export class MyHistory extends HTMLElement {
 
             const subsection = document.createElement('section')
             subsection.classList.add('subsection')
+        
+            data.forEach(x => subsection.appendChild(this.mkSub(x)))
             
-                const sub = document.createElement('div')
-                sub.classList.add('sub')
-                
-                x.children.map(x => {
-                    if(x.url){
-                        // extension can't point to local addresses like chrome://bookmarks
-                        if(x.url.substring(0, 7) !== 'chrome:'){
+            group.appendChild(subsection)
+            this.dom.accordion.appendChild(group)
 
-                            const url = new URL(x.url)
-                            const shorten = x.url.length >= 42 ? `${x.url.substring(0, 39)}...` : x.url
+            this.HistoryRan = true
+        }
+        else {
 
-                            const br = document.createElement('br')
-                            const cell = document.createElement('div')
-                            cell.classList.add('cell')
+            //console.log('else data histolry')
+            //console.dir(data)
+            const group = document.createElement('section')
+            group.classList.add('group')
 
-                            const a = document.createElement('a')
-                            a.href = `${x.url}`
-                            a.target = "_self"
-                            a.title = x.url
-                            a.textContent = ''
+            
+            const heading = document.createElement('section')
+            heading.classList.add('heading')
+            
+            const text = document.createElement('span')
+            heading.classList.add('heading-text')
+            text.textContent = 'Favorites'
+            heading.appendChild(text)
+            
+            const chev = document.createElement('span')
+            chev.classList.add('chev')
+            chev.innerHTML = icons.chev
+            heading.appendChild(chev)
+            
+            group.appendChild(heading)
 
-                            const img = document.createElement('img')
-                            img.src = `https://www.google.com/s2/favicons?domain=${url.hostname}`
+            
 
-                            const text = document.createElement('span')
-                            text.textContent = x.title ? x.title : shorten
+            const subsection = document.createElement('section')
+            subsection.classList.add('subsection')
+        
+            
 
-                            a.appendChild(img)
-                            a.appendChild(text)
+            data.forEach(x => x.children.forEach(x => {
 
-                            cell.appendChild(a)
-                            
-                            sub.appendChild(cell)
-                        }
-                        else {
-                            return false
-                        }
-                    }
-                })
+                if(false && x.title){
 
-                group.appendChild(sub)
-                accordion.appendChild(group)
-            })
-        })
+                    const heading = document.createElement('section')
+                    heading.classList.add('heading')
+                    
+                    const text = document.createElement('span')
+                    heading.classList.add('heading-text')
+                    text.textContent = x.title
+                    heading.appendChild(text)
+                    
+                    const chev = document.createElement('span')
+                    chev.classList.add('chev')
+                    chev.innerHTML = icons.chev
+                    heading.appendChild(chev)
+                    
+                    group.appendChild(heading)
 
-        return accordion
+                }
+
+                if(x.children){
+                    x.children.forEach(x => {
+                        const sub = this.mkSub(x)
+                        //console.dir(sub)
+                        if(sub){ subsection.appendChild(sub) }
+                    })
+                }
+                else {
+                    const sub = this.mkSub(x)
+                    //console.dir(sub)
+                    if(sub){ subsection.appendChild(sub) }
+                }
+
+
+            }))
+            group.appendChild(subsection)
+
+            this.dom.accordion.appendChild(group)
+            this.BooksRan = true
+        }
+
+        if(this.BooksRan && this.HistoryRan){
+            //console.log('both ran')
+            this.dom.books.appendChild(this.dom.accordion)
+        }
+    }
+    
+
+    mkSub(x){
+        //console.dir(x)
+        if(x.url && x.url.substring(0, 7) !== 'chrome:'){
+            // extension can't point to local addresses like chrome://bookmarks
+
+            const sub = document.createElement('div')
+            sub.classList.add('sub')
+            
+            const url = new URL(x.url)
+            if(!url.hostname){return}
+
+            const shorten = x.url.length >= 42 ? `${x.url.substring(0, 39)}...` : x.url
+
+            const br = document.createElement('br')
+            const cell = document.createElement('div')
+            cell.classList.add('cell')
+
+            const a = document.createElement('a')
+            a.href = `${x.url}`
+            a.target = "_self"
+            a.title = x.url
+            a.textContent = ''
+
+            const img = document.createElement('img')
+            img.src = `https://www.google.com/s2/favicons?domain=${url.hostname}`
+
+            const text = document.createElement('span')
+            text.textContent = x.title ? x.title : shorten
+
+            a.appendChild(img)
+            a.appendChild(text)
+
+            cell.appendChild(a)
+            
+            sub.appendChild(cell)
+
+            return sub
+        }
     }
     attributeChangedCallback(n, ov, nv) {
         super.attributeChangedCallback(n, ov, nv)
