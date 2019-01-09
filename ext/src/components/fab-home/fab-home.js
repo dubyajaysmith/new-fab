@@ -24,19 +24,8 @@ const icons = {
     </svg>`
 }
 
-const style = /* html */`
-
-<style>
-    
-
-
-</style>
-`
-
 const template = document.createElement('template')
 template.innerHTML = /* html */`
-
-    ${style}
 
     <fab-projects></fab-projects>
 

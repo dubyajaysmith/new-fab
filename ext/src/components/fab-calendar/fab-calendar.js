@@ -35,7 +35,7 @@ const style = /* html */`
     width: -webkit-fill-available;
     padding: 0rem 0rem .25rem .5rem;
 }
-#cmp-header #name {
+#cmp-header .title {
     color: #FFF;
     line-height: 2;
     font-weight: 600;
@@ -70,7 +70,19 @@ tbody > tr > td {
 #today {
     background: var(--green);
     border: 1pt solid var(--green);
+    color: white;
 }
+
+/*#notes {
+    margin-top: 1vh;
+    width: 100%;
+    height: 75px;
+    background: #00ffd2;
+    border-radius: 5px;
+    border: 1pt solid #00BC9D;
+    background-color: #00BC9D;
+    color: white;
+}*/
 </style>
 `
 
@@ -82,7 +94,7 @@ ${style}
 <div id="card">
     <div id="container">
         <div id="cmp-header">
-            <span id="name">Calendar</span>
+            <span class="title">Track Calendar</span>
         </div>
         <div id="actions">
             <table>
@@ -100,6 +112,8 @@ ${style}
                 <tbody>
                 </tbody>
             </table>
+            <br />
+            <fab-notes id="notes" mode="calendar"></fab-notes>
         </div>
     </div>
 </div>`
@@ -129,6 +143,7 @@ export class FabCalendar extends HTMLElement {
         
         this.dom = {
             header: this.shadowRoot.getElementById('name'),
+            notes: this.shadowRoot.getElementById('notes'),
             calendar: this.shadowRoot.querySelector('tbody')
         }
 	    
@@ -136,6 +151,18 @@ export class FabCalendar extends HTMLElement {
     }
 	registerListeners(){
         
+        this.dom.notes.addEventListener('save', e => {
+            
+            if(e.detail.mode == 'calendar'){
+                console.log('todo: save note based on day')
+                console.dir(e)
+                //sync.project.get(this.dom.projects.value).then(pj => {
+                //    pj.notes = e.detail.note
+                //    sync.project.save(pj)
+                //})
+            }
+        })
+
         this.init()
 	}
 	
@@ -153,58 +180,51 @@ export class FabCalendar extends HTMLElement {
 
     init(){
 
-        this.today = new Date()
-        this.currentMonth = this.today.getMonth()
-        this.currentYear = this.today.getFullYear()
-        //this.selectYear = document.getElementById("year")
-        //this.selectMonth = document.getElementById("month")
+        this.selectedDate = new Date()
+        this.selectedMonth = this.selectedDate.getMonth()
+        this.selectedYear = this.selectedDate.getFullYear()
 
         this.months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
         //let monthAndYear = document.getElementById("monthAndYear")
-        this.showCalendar(this.currentMonth, this.currentYear)
+        this.showCalendar(this.selectedMonth, this.selectedYear)
     }
 
     
     showCalendar(month, year) {
-
+        console.log(month, year)
         const firstDay = (new Date(year, month)).getDay()
         const daysInMonth = 32 - new Date(year, month, 32).getDate()
 
-        // clearing all previous cells
+        // clear previous cells
         this.dom.calendar.innerHTML = ''
 
         // filing data about month and in the page via DOM.
-        this.dom.header.textContent = `${this.months[month]} ${year}`
-        this.selectYear = year
-        this.selectMonth = month
+        this.dom.notes.setAttribute('title', `${this.months[month]} ${this.selectedDate.getDay()}, ${year}`)
 
         // creating all cells
         let date = 1
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
             // creates a table row
-            let row = document.createElement("tr")
+            const row = document.createElement("tr")
 
             //creating individual cells, filing them up with data.
             for (let j = 0; j < 7; j++) {
                 
-                if (i === 0 && j < firstDay) {
-                    let cell = document.createElement("td")
-                    let cellText = document.createTextNode("")
+                if ((i === 0 && j < firstDay) || date > daysInMonth) {
+                    const cell = document.createElement("td")
+                    const cellText = document.createTextNode("")
                     cell.appendChild(cellText)
                     row.appendChild(cell)
                 }
-                else if (date > daysInMonth) {
-                    break
-                }
                 else {
 
-                    let cell = document.createElement("td")
-                    let cellText = document.createTextNode(date)
-                    if (date === this.today.getDate() && year === this.today.getFullYear() && month === this.today.getMonth()) {
+                    const cell = document.createElement("td")
+                    const cellText = document.createTextNode(date)
+                    if (date === this.selectedDate.getDate() && year === this.selectedDate.getFullYear() && month === this.selectedDate.getMonth()) {
                         cell.id = 'today'
                     } // color today's date
-                    cell.onclick = () => cell.textContent ? this.getDate(Number(cell.textContent)) : null
+                    cell.onclick = e => cell.textContent ? this.changeDate(cell.textContent, this.selectedMonth, this.selectedYear, e) : null
                     cell.appendChild(cellText)
                     row.appendChild(cell)
                     date++
@@ -214,8 +234,22 @@ export class FabCalendar extends HTMLElement {
             this.dom.calendar.appendChild(row) // appending each row into calendar body.
         }
     }
-    getDate(n){
-        console.log(`${n}/${this.currentMonth+1}/${this.currentYear}`)
+    changeDate(day, month, year, event){
+
+        this.dom.notes.setAttribute('title', `${this.months[month]} ${day} Notes`)
+        
+        if(day){
+            this.dom.calendar.querySelector('#today').id = ''
+            //this.dom.header.textContent = `${this.months[month]} ${day} Notes`
+        }
+        
+        if(month && year){
+            showCalendar(month, year)
+        }
+
+        if(event){
+            event.target.id = 'today'
+        }
     }
     
 }

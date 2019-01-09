@@ -1,6 +1,8 @@
 // jshint asi: true, esversion: 6, laxcomma: true
 'use strict()'
 
+import * as sync from '../../script/sync.mjs'
+
 const icons = {
     home: /* html */`<svg title="Home" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="var(--pink)"
@@ -193,10 +195,10 @@ template.innerHTML = /* html */`
             <project-tasks id="tasks"></project-tasks>
             <br /><br />
 
-            <project-notes id="notes"></project-notes>
+            <fab-notes id="notes" mode="project"></fab-notes>
             <br /><br />
 
-            <project-links id="links"></project-links>
+            <fab-links id="links"></fab-links>
             <br />
 
         </div>
@@ -225,7 +227,7 @@ export class FabProjects extends HTMLElement {
 
     initElements(doc){
 
-        chrome.storage.sync.get(['projects'], bin => 
+        sync.project.getAll().then(bin => 
             Array.isArray(bin.projects) ? this.buildProjects(bin) : chrome.storage.sync.set({ projects:[] }))
 
         this.dom = {
@@ -243,20 +245,7 @@ export class FabProjects extends HTMLElement {
         //document.getElementsByTagName('project-tasks')
         this.registerListeners()
     }
-    getProjects(){
-        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
-    }
-    saveProjects(projects){
-        return new Promise(res => chrome.storage.sync.set({projects}, () => 
-            res(`updated projects. has ${projects.length} now.`)))
-    }
-    updateProject(project){
-        return new Promise(res => this.getProjects().then(bin => {
-            
-            const projects = [project, ...bin.projects.filter(x => x.name !== project.name)]
-            this.saveProjects(projects).then(x => res(x))
-        }))
-    }
+        
     registerListeners(){
         
         /* On Click */
@@ -264,6 +253,7 @@ export class FabProjects extends HTMLElement {
         this.dom.save.onclick = () => {
             
             const name = this.dom.pName.value
+            this.selected = name
 
             if(!name){
                 console.warn('Project needs a name')
@@ -276,12 +266,12 @@ export class FabProjects extends HTMLElement {
                 name, time: [], orgs: [], tasks: [], links: [], notes: ``
             }
             
-            this.getProjects().then(bin => {
+            sync.project.getAll().then(bin => {
                 
                 const projects = [project, ...bin.projects]
                 
-                this.saveProjects(projects)
-                    .then(() => this.getProjects())
+                sync.project.save(projects)
+                    .then(() => sync.project.getAll())
                     .then(x => {
                         this.buildProjects(x)
                         this.dom.projects.value = name
@@ -298,18 +288,18 @@ export class FabProjects extends HTMLElement {
             
             if(confirm(`Sure you want to Delete ${name}?`)){
                 
-                this.getProjects().then(bin => {
+                sync.project.getAll().then(bin => {
                     
                     const projects = bin.projects.filter(x => x.name != name)
-                    this.saveProjects(projects).then(x => console.log(x))
+                    sync.project.saveAll(projects).then(x => console.log(x))
                 })
             }
         }
 
         /* clear higher things */
-        this.dom.container.onclick = () => {
-            this.dom.links.setAttribute("preview", "hide")
-        }
+        //this.dom.container.onclick = () => {
+        //    this.dom.links.setAttribute("preview", "hide")
+        //}
 
         
         /* On Change */
@@ -317,18 +307,19 @@ export class FabProjects extends HTMLElement {
             
             const name = this.dom.projects.value
 
-            this.getProjects().then(bin => {
+            sync.project.getAll().then(bin => {
 
                 if(bin.projects){
 
                     const project = bin.projects.filter(x => x.name == name)[0]
 
                     this.project = project
+                    console.dir(project)
 
                     this.dom.area.classList.add('active')
                     
                     this.dom.task.setAttribute("project", name)
-                    this.dom.notes.setAttribute("project", name)
+                    this.dom.notes.setAttribute("notes", project.notes)
                     this.dom.links.setAttribute("project", name)
                 }
                 else {
@@ -371,6 +362,16 @@ export class FabProjects extends HTMLElement {
             this.dom.projects.options.selectedIndex = localStorage.selected_project
             this.dom.projects.onchange()
         }, 0)
+
+        this.dom.notes.addEventListener('save', e => {
+            
+            if(e.detail.mode == 'project'){
+                sync.project.get(this.dom.projects.value).then(pj => {
+                    pj.notes = e.detail.note
+                    sync.project.save(pj)
+                })
+            }
+        })
     }
 }
 customElements.define(FabProjects.is, FabProjects);

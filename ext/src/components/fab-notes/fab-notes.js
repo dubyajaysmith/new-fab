@@ -1,7 +1,3 @@
-/*
-* Use tag to import via es6 module (html import depricated in v1 spec :/ )
-* <script type="module" src="../components/project-notes/project-notes.js"></script>
-*/
 // jshint asi: true, esversion: 6, laxcomma: true 
 'use strict()'
 
@@ -65,25 +61,27 @@ template.innerHTML = /* template */`
     <div class="cmp-container">
         
         <div class="cmp-header">
-            <span class="name">Notes</span>
+            <span class="name"></span>
         </div>
-        <textarea class="notes" placeholder="Notes for project" ></textarea>
+        <textarea class="notes" placeholder="Add Some Notes..." ></textarea>
 
     </div>
 `
 
-export class ProjectLinks extends HTMLElement {
+export class FabNotes extends HTMLElement {
 
     constructor() {
         super()
+        this.mode = this.getAttribute('mode')
+        
         this.attachShadow({mode: 'open'})
     }
     static get is() {
-        return 'project-notes'
+        return 'fab-notes'
     }
 
     static get observedAttributes() {
-        return ['project', 'notes']
+        return ['mode', 'notes', 'title']
     }
 
     connectedCallback() {
@@ -94,9 +92,11 @@ export class ProjectLinks extends HTMLElement {
     registerElements(doc){
         
         this.dom = {
+            title: doc.querySelector('.name'),
             notes: doc.querySelector('.notes')
         }
-
+        const title = `${this.mode ? this.mode.charAt(0).toUpperCase() + this.mode.slice(1) : ''} Notes`
+        this.dom.title.textContent = title
         this.registerListeners()
     }
 
@@ -111,41 +111,25 @@ export class ProjectLinks extends HTMLElement {
     
     attributeChangedCallback(n, ov, nv) {
         switch (n) {
-            case 'project':
-                this.getProject(nv)
-                .then(pj => this.renderNotes(pj.notes))
-            break
             case 'notes':
                 this.renderNotes(nv)
+            break
+            case 'mode':
+                this.mode = nv
+            break
+            case 'title': 
+                this.dom.title.textContent = nv
             break
         }
     }
 
     updateNotes(note){
-        this.getProject(this.getAttribute('project')).then(pj => {
-            pj.notes = note
-            this.updateProject(pj)
-        })
-    }
-    
-    getProject(name){
-        return new Promise(res => chrome.storage.sync.get(['projects'], bin => res(bin.projects.filter(x => x.name === name)[0])))
-    }
-    getProjects(){
-        return new Promise(res => chrome.storage.sync.get(['projects'], x => res(x)))
-    }
-    saveProjects(projects){
-        return new Promise(res => chrome.storage.sync.set({projects}, () => 
-            res(`updated projects. has ${projects.length} now.`)))
-    }
-    updateProject(project){
-        return new Promise(res => this.getProjects().then(bin => {
-            
-            const projects = [project, ...bin.projects.filter(x => x.name !== project.name)]
-            this.saveProjects(projects).then(x => res(x))
-        }))
-    }
+        
+        const detail = { note, mode: this.mode }
+        const e = new CustomEvent('save', { detail })
 
+        this.dispatchEvent(e)
+    }
 }
 
-customElements.define(ProjectLinks.is, ProjectLinks)
+customElements.define(FabNotes.is, FabNotes)

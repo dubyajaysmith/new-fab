@@ -1,7 +1,3 @@
-/*
-* Use tag to import via es6 module (html import depricated in v1 spec :/ )
-* <script type="module" src="../components/project-links/project-links.js"></script>
-*/
 // jshint asi: true, esversion: 6, laxcomma: true 
 'use strict()'
 
@@ -165,18 +161,18 @@ template.innerHTML = /* template */`
     </div>
 `
 
-export class ProjectLinks extends HTMLElement {
+export class FabLinks extends HTMLElement {
 
     constructor() {
         super()
         this.attachShadow({mode: 'open'})
     }
     static get is() {
-        return 'project-links'
+        return 'fab-links'
     }
 
     static get observedAttributes() {
-        return ['project', 'preview', 'links']
+        return ['project', 'links']//'preview',
     }
 
     connectedCallback() {
@@ -297,4 +293,4 @@ export class ProjectLinks extends HTMLElement {
     }
 }
 
-customElements.define(ProjectLinks.is, ProjectLinks)
+customElements.define(FabLinks.is, FabLinks)
