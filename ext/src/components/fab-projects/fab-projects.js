@@ -253,13 +253,13 @@ export class FabProjects extends HTMLElement {
         this.dom.save.onclick = () => {
             
             const name = this.dom.pName.value
-            this.selected = name
 
             if(!name){
                 console.warn('Project needs a name')
                 return false
             }
 
+            this.selected = name
             this.dom.pName.value = ''
             
             const project = {
@@ -270,7 +270,7 @@ export class FabProjects extends HTMLElement {
                 
                 const projects = [project, ...bin.projects]
                 
-                sync.project.save(projects)
+                sync.project.saveAll(projects)
                     .then(() => sync.project.getAll())
                     .then(x => {
                         this.buildProjects(x)
@@ -290,8 +290,8 @@ export class FabProjects extends HTMLElement {
                 
                 sync.project.getAll().then(bin => {
                     
-                    const projects = bin.projects.filter(x => x.name != name)
-                    sync.project.saveAll(projects).then(x => console.log(x))
+                    const projects = bin.projects.filter(x => x.name != name && x.name)
+                    sync.project.saveAll(projects).then(x => this.buildProjects({projects: x}))
                 })
             }
         }
@@ -312,9 +312,8 @@ export class FabProjects extends HTMLElement {
                 if(bin.projects){
 
                     const project = bin.projects.filter(x => x.name == name)[0]
-
+                    if(!project){return}
                     this.project = project
-                    console.dir(project)
 
                     this.dom.area.classList.add('active')
                     
