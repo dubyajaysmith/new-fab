@@ -19,6 +19,4 @@ Unlisted early publishes are on the [Chrome Web Store](https://chrome.google.com
 * Moonshot: replace all/most express backend for [Solid](https://github.com/solid/) if/when viable
 * Moonshot: load WC views built for it through Settings with additional permissons under optional in manifest to ask for
 
-![screenie](https://i.imgur.com/AOHIE9G.png)
-
-![screenie](https://i.imgur.com/Qp8mQwo.png)
+![screenie](https://i.imgur.com/vdVxQVE.png)
